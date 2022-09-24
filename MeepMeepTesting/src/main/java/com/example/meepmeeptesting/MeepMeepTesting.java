@@ -20,14 +20,6 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-31, 58, Math.toRadians(-90)))
 
-
-                              /* .splineTo(new Vector2d(-20, 44), Math.toRadians(-60))
-
-                                .splineTo(new Vector2d(-45, 45), Math.toRadians(60))*/
-
-
-
-
                                .splineTo(new Vector2d(-40, 36), Math.toRadians(-90))
 
                                .splineTo(new Vector2d(-28, 36), Math.toRadians(0))
@@ -36,50 +28,6 @@ public class MeepMeepTesting {
 
                                 .splineTo(new Vector2d(-50, 50), Math.toRadians(100))
 
-
-
-                             //   .splineTo(new Vector2d(-46, 47), Math.toRadians(-180))
-                                //.back(7)
-
-                                //. 51, 58
-                              //  .splineTo(new Vector2d(-31, 58), Math.toRadians(-60))
-                              //  .splineTo(new Vector2d(-31, 58), Math.toRadians(-60))
-
-                               // .splineToLinearHeading(new Pose2d(-46, 47), Math.toRadians(-90))
-                               // .turn(Math.toRadians(-90))
-                               // .forward(30)
-                               // .turn(Math.toRadians(90))
-                              //  .forward(30)
-                              //  .turn(Math.toRadians(90))
-                              //  .forward(30)
-                              //  .turn(Math.toRadians(90))
-                             //   .forward(30)
-                             //   .turn(Math.toRadians(90))
-
-
-                           /*      .splineTo(new Vector2d(-48, -65), Math.toRadians(0))
-                                 .splineTo(new Vector2d(-10, -48), Math.toRadians(0))
-                                .splineTo(new Vector2d(-10, -36), Math.toRadians(90))
-                               // .splineTo(new Vector2d(-10, 48), Math.toRadians(-90))
-                                .splineTo(new Vector2d(-10, -65), Math.toRadians(-90))
-                                .strafeLeft(48)
-                                .strafeRight(24)
-                                .strafeLeft(24)
-                                .strafeRight(24)
-                                .strafeLeft(56)*/
-                             /*   .splineTo(new Vector2d(-10, 48), Math.toRadians(0))
-                                .splineTo(new Vector2d(-10, 36), Math.toRadians(90))*/
-
-                               // .strafeLeft(20)
-                               // .forward(20)
-                                //.splineTo(new Vector2d(-48, -65), Math.toRadians(0))
-
-
-                              //  .forward(5)
-
-
-                                // add a spline for cycling
-                               // .splineTo(new Vector2d(-10, 65), Math.toRadians(-90))
                                 .build()
                 );
 
@@ -101,7 +49,7 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_FREIGHTFRENZY_ADI_DARK)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
 
