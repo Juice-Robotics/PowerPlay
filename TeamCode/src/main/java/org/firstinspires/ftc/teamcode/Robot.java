@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.claw.Claw;
+import org.firstinspires.ftc.teamcode.slides.Slides;
 
 
 public class Robot {
@@ -13,6 +14,7 @@ public class Robot {
     // SUBSYSTEM DECLARATIONS
     public Component[] components;
     public Claw claw;
+    public Slides slides;
 
     // STATE VARS
     // example: clawToggled = false;
@@ -59,11 +61,13 @@ public class Robot {
 
         // INIT SUBSYSTEMS
         this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10]);
+        this.slides = new Slides((Motor) components[4], (Motor) components[5]);
     }
 
 
     // CONTROL FUNCTIONS
 
+    //CLAW
     public void toggleClaw(boolean x) {
         this.claw.toggle();
     }
@@ -78,5 +82,23 @@ public class Robot {
 
     public void resetClawRotation(boolean b) {
         this.claw.resetRotation(Axis.ALL);
+    }
+
+
+    // SLIDES
+    public void slidesGroundPreset(boolean pad_down) {
+        this.slides.runToPreset(Levels.GROUND);
+    }
+
+    public void slidesLowPreset(boolean pad_left) {
+        this.slides.runToPreset(Levels.LOW);
+    }
+
+    public void slidesMediumPreset(boolean pad_right) {
+        this.slides.runToPreset(Levels.MEDIUM);
+    }
+
+    public void slidesHighPreset(boolean pad_up) {
+        this.slides.runToPreset(Levels.HIGH);
     }
 }
