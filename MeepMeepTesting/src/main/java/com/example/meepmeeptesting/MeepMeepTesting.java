@@ -60,7 +60,7 @@ public class MeepMeepTesting {
         // Declare out second bot
         RoadRunnerBotEntity mySecondBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be red
-                .setColorScheme(new ColorSchemeBlueDark())
+                .setColorScheme(new ColorSchemeRedDark())
 //                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 58, Math.toRadians(-90)))
@@ -114,7 +114,8 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f)
 
                 // Add both of our declared bot entities
-                .addEntity(mySecondBot)
+                .addEntity(myFirstBot)
+//                .addEntity(mySecondBot)
               //  .addEntity(mySecondBot)
                 .start();
     }

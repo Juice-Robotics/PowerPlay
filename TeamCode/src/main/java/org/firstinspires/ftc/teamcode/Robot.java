@@ -5,8 +5,8 @@ import org.firstinspires.ftc.teamcode.lib.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 // IMPORT SUBSYSTEMS
-import org.firstinspires.ftc.teamcode.claw.Claw;
-import org.firstinspires.ftc.teamcode.slides.Slides;
+import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
 
 
 public class Robot {
@@ -40,10 +40,10 @@ public class Robot {
         this.drive = new SampleMecanumDrive(map);
 
         this.components = new Component[]{
-            new Motor(3, "backLeft", map, true),          //0 left odometer
-            new Motor(2, "backRight", map, false),        //1 right odometer
-            new Motor(1, "frontLeft", map, true),         //2 middle odometer
-            new Motor(0, "frontRight", map, false),       //3
+            new Motor(3, "leftRear", map, true),          //0 left odometer
+            new Motor(2, "rightRear", map, false),        //1 right odometer
+            new Motor(1, "leftFront", map, true),         //2 middle odometer
+            new Motor(0, "rightFront", map, false),       //3
             
             new Motor(1, "slides1", map, true),           //4
             new Motor(2, "slides2", map, true),           //5
@@ -100,5 +100,38 @@ public class Robot {
 
     public void slidesHighPreset(boolean pad_up) {
         this.slides.runToPreset(Levels.HIGH);
+    }
+
+
+    //DRIVE
+    public void setDrivePower(double x, double y, double rx) {
+        double powerFrontLeft = y + x + rx;
+        double powerFrontRight = y - x - rx;
+        double powerBackLeft = y - x + rx;
+        double powerBackRight = y + x - rx;
+
+        if (Math.abs(powerFrontLeft) > 1 || Math.abs(powerBackLeft) > 1 ||
+                Math.abs(powerFrontRight) > 1 || Math.abs(powerBackRight) > 1) {
+            // Find the largest power
+            double max;
+            max = Math.max(Math.abs(powerFrontLeft), Math.abs(powerBackLeft));
+            max = Math.max(Math.abs(powerFrontRight), max);
+            max = Math.max(Math.abs(powerBackRight), max);
+
+            // Divide everything by max (it's positive so we don't need to worry
+            // about signs)
+            powerFrontLeft /= max;
+            powerBackLeft /= max;
+            powerFrontRight /= max;
+            powerBackRight /= max;
+        }
+        Motor backLeft = (Motor) components[0];
+        Motor backRight = (Motor) components[1];
+        Motor frontLeft = (Motor) components[2];
+        Motor frontRight = (Motor) components[3];
+        frontLeft.setSpeed((float)powerFrontLeft);
+        frontRight.setSpeed((float)powerFrontRight);
+        backLeft.setSpeed((float)powerBackLeft);
+        backRight.setSpeed((float)powerBackRight);
     }
 }

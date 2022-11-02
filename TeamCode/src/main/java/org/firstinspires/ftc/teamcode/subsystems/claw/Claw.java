@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.claw;
+package org.firstinspires.ftc.teamcode.subsystems.claw;
 
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
 import org.firstinspires.ftc.teamcode.lib.Axis;
