@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.lib.Component;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.Motor;
+import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
 
 @TeleOp(group = "competition")
 public class SlidesAndDrive extends LinearOpMode {
@@ -26,15 +27,16 @@ public class SlidesAndDrive extends LinearOpMode {
                 new Motor(2, "slides2", hardwareMap, true),           //5
         };
 
-        Motor slides1 = (Motor) components[4];
-        Motor slides2 = (Motor) components[5];
+//        Motor slides1 = (Motor) components[4];
+//        Motor slides2 = (Motor) components[5];
 //        slides1.setTarget(1);
 //        slides1.motor.setTargetPosition(1);
 //        slides2.setTarget(1);
 //        slides2.motor.setTargetPosition(1);
 //        slides1.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        slides2.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slides2.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        Slides slides = new Slides((Motor) components[4], (Motor) components[5]);
 
         double x;
         double y;
@@ -50,14 +52,14 @@ public class SlidesAndDrive extends LinearOpMode {
 
             //DRIVE
             if (gamepad1.right_bumper){
-                x = -gamepad1.left_stick_x*0.25;
+                x = gamepad1.right_stick_x*0.25;
                 y = -gamepad1.left_stick_y*0.25;
-                rx = gamepad1.right_stick_x*0.25;
+                rx = gamepad1.left_stick_x*0.25;
 
             } else{
-                x = -gamepad1.left_stick_x;
+                x = gamepad1.right_stick_x;
                 y = -gamepad1.left_stick_y;
-                rx = gamepad1.right_stick_x;
+                rx = gamepad1.left_stick_x;
             }
 
 
@@ -87,33 +89,37 @@ public class SlidesAndDrive extends LinearOpMode {
             Motor frontRight = (Motor) components[3];
             frontLeft.setSpeed((float)powerFrontLeft);
             frontRight.setSpeed((float)powerFrontRight);
-            backLeft.setSpeed((float)powerBackLeft);
-            backRight.setSpeed((float)powerBackRight);
-        }
+            backLeft.setSpeed(-(float)powerBackLeft);
+            backRight.setSpeed(-(float)powerBackRight);
 
-//        //SLIDES
-//        slides.updateDistance();
-//        if (gamepad1.dpad_down && !previousGamepad1.dpad_down)
-//            slides.runToPreset(Levels.GROUND);
-//        else if (gamepad1.dpad_left && !previousGamepad1.dpad_left)
-//            slides.runToPreset(Levels.LOW);
-//        else if (gamepad1.dpad_right && !previousGamepad1.dpad_right)
-//            slides.runToPreset(Levels.MEDIUM);
-//        else if (gamepad1.left_bumper && !previousGamepad1.left_bumper)
-//            slides.runToPreset(Levels.HIGH);
-        if (gamepad1.left_trigger > 0.5) {
-            slides1.setSpeed(1);
-            slides2.setSpeed(1);
-        } else if (gamepad1.left_trigger < 0.5) {
-            slides1.setSpeed(0);
-            slides2.setSpeed(0);
-        }
 
-        try {
-            previousGamepad1.copy(gamepad1);
-            previousGamepad2.copy(gamepad2);
-        } catch (RobotCoreException e) {
+            //SLIDES
+        if (gamepad1.dpad_down)
+            slides.runToPreset(Levels.GROUND);
+        else if (gamepad1.dpad_left)
+            slides.runToPreset(Levels.LOW);
+        else if (gamepad1.dpad_right)
+            slides.runToPreset(Levels.MEDIUM);
+        else if (gamepad1.left_bumper)
+            slides.runToPreset(Levels.HIGH);
+        slides.update();
+//            if (gamepad1.left_trigger > 0.5) {
+//                slides1.setSpeed(-1);
+//                slides2.setSpeed(1);
+//            } else if (gamepad1.left_trigger < 0.5) {
+//                slides1.setSpeed(0);
+//                slides2.setSpeed(0);
+//            }
 
+            telemetry.addData("slides target ", slides.target);
+            telemetry.update();
+
+            try {
+                previousGamepad1.copy(gamepad1);
+                previousGamepad2.copy(gamepad2);
+            } catch (RobotCoreException e) {
+
+            }
         }
     }
 }

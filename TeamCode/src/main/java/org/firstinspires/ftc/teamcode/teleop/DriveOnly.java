@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.lib.Component;
 import org.firstinspires.ftc.teamcode.lib.Motor;
+import org.openftc.easyopencv.OpenCvCamera;
 
 @TeleOp(group = "competition")
 public class DriveOnly extends LinearOpMode {
