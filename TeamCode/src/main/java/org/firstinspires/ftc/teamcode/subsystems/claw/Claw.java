@@ -9,11 +9,11 @@ public class Claw {
     public StepperServo clawX2;
     public StepperServo clawY;
 
-    public boolean state; // if open, true
+    public boolean state = false; // if open, true
 
     // CONSTANTS
-    public float clawOpen = 90;
-    public float clawClose = 0;
+    public double clawOpen = 0.75;
+    public double clawClose = 1;
     public float clawXReset = 0;
     public float clawYReset = 0;
     public double clawXStep = 0.1;
@@ -29,12 +29,12 @@ public class Claw {
     public void toggle() {
         // Close Claw
         if (this.state) {
-            this.claw.setAngle(clawClose);
+            this.claw.servo.setPosition(clawClose);
             this.state = false;
         }
         // Open Claw
         else {
-            this.claw.setAngle(clawOpen);
+            this.claw.servo.setPosition(clawOpen);
             this.state = true;
         }
     }

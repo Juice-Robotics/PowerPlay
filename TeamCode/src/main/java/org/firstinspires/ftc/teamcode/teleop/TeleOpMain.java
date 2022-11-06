@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
@@ -21,6 +23,8 @@ public class TeleOpMain extends LinearOpMode {
         Gamepad previousGamepad1 = new Gamepad();
         Gamepad previousGamepad2 = new Gamepad();
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         waitForStart();
         if (isStopRequested()) return;
 
@@ -39,18 +43,18 @@ public class TeleOpMain extends LinearOpMode {
             }
             robot.setDrivePower(-x, y, rx);
 
-            //SLIDES
-            if (gamepad1.dpad_down && !previousGamepad1.dpad_down)
-                robot.slidesGroundPreset(gamepad1.dpad_down);
-            else if (gamepad1.dpad_left && !previousGamepad1.dpad_left)
-                robot.slidesLowPreset(gamepad1.dpad_left);
-            else if (gamepad1.dpad_right && !previousGamepad1.dpad_right)
-                robot.slidesMediumPreset(gamepad1.dpad_right);
-            else if (gamepad1.left_bumper && !previousGamepad1.left_bumper)
-                robot.slidesHighPreset(gamepad1.left_bumper);
+            //PRESETS
+            if (gamepad1.dpad_down)
+                robot.groundPreset(gamepad1.dpad_down);
+            if (gamepad1.dpad_left)
+                robot.lowPreset(gamepad1.dpad_left);
+            if (gamepad1.dpad_right)
+                robot.mediumPreset(gamepad1.dpad_right);
+            if (gamepad1.left_bumper)
+                robot.highPreset(gamepad1.left_bumper);
 
             //CLAW
-            if (gamepad1.x && !previousGamepad1.x)
+            if (gamepad1.cross)
                 robot.toggleClaw(gamepad1.x);
             if (gamepad2.left_stick_y > 0.2) {
                 robot.startClawX(true);
@@ -67,6 +71,18 @@ public class TeleOpMain extends LinearOpMode {
 //            if (gamepad2.b && !previousGamepad2.b)
 //                robot.resetClawRotation(gamepad2.b);
 //            if (gamepad1.)
+
+            robot.slides.update();
+            telemetry.addData("v4b position target: ", robot.v4b.getAngle());
+            telemetry.addData("v4b1 position: ", robot.v4b.v4b1.getAngle());
+            telemetry.addData("v4b2 position: ", robot.v4b.v4b2.getAngle());
+            telemetry.addData("x pressed?", gamepad1.cross);
+            telemetry.addData("claw status: ", robot.claw.state);
+            telemetry.addData("claw: ", robot.claw.claw.servo.getPosition());
+            telemetry.addData("d left? ", gamepad1.dpad_left);
+            telemetry.addData("slides target: ", robot.slides.target);
+            telemetry.addData("slides level: ", robot.slides.currentLevel);
+            telemetry.update();
 
             try {
                 previousGamepad1.copy(gamepad1);

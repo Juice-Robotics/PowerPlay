@@ -15,18 +15,19 @@ public class Slides {
     public double p = 0.06, i = 0, d = 0.002;
     public double f = 0.15;
 
-    public int target = -50;
+    public int target = 0;
+    public Levels currentLevel = Levels.ZERO;
     private final double ticks_in_degrees = 700 / 180.0;
 
     public Motor slides1;
     public Motor slides2;
 
     // TARGETS IN NEGATIVE
-    public int zeroTarget = -50;
-    public int groundTarget = -100;
-    public int lowTarget = -200;
-    public int midTarget = -250;
-    public int highTarget = -300;
+    public int zeroTarget = 0;
+    public int groundTarget = -50;
+    public int lowTarget = -100;
+    public int midTarget = -260;
+    public int highTarget = -425;
 
 
     public Slides(Motor slides1, Motor slides2) {
@@ -51,7 +52,7 @@ public class Slides {
         double power2 = pid2 + ff;
 
         slides1.motor.setPower(power1);
-        slides2.motor.setPower(power2);
+        slides2.motor.setPower(-power2);
     }
 
     public void runToPosition(int ticks) {
@@ -59,17 +60,38 @@ public class Slides {
     }
 
     public void runToPreset(Levels level) {
-        switch (level) {
-            case ZERO:
-                target = zeroTarget;
-            case GROUND:
-                target = groundTarget;
-            case LOW:
-                target = lowTarget;
-            case MEDIUM:
-                target = midTarget;
-            case HIGH:
-                target = highTarget;
+//        switch (level) {
+//            case ZERO:
+//                target = zeroTarget;
+//                currentLevel = level;
+//            case GROUND:
+//                target = groundTarget;
+//                currentLevel = level;
+//            case LOW:
+//                target = lowTarget;
+//                currentLevel = level;
+//            case MEDIUM:
+//                target = midTarget;
+//                currentLevel = level;
+//            case HIGH:
+                /*target = lowTarget;
+                currentLevel = level;*/
+//        }
+        if (level == Levels.ZERO) {
+            target = zeroTarget;
+            currentLevel = level;
+        } else if (level == Levels.GROUND) {
+            target = groundTarget;
+            currentLevel = level;
+        } else if (level == Levels.LOW) {
+            target = lowTarget;
+            currentLevel = level;
+        } else if (level == Levels.MEDIUM) {
+            target = midTarget;
+            currentLevel = level;
+        } else if (level == Levels.HIGH) {
+            target = highTarget;
+            currentLevel = level;
         }
     }
 

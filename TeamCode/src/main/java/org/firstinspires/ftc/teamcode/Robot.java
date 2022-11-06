@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
+import org.firstinspires.ftc.teamcode.subsystems.v4b.V4B;
 
 
 public class Robot {
@@ -15,6 +16,7 @@ public class Robot {
     public Component[] components;
     public Claw claw;
     public Slides slides;
+    public V4B v4b;
 
     // STATE VARS
     // example: clawToggled = false;
@@ -62,6 +64,7 @@ public class Robot {
         // INIT SUBSYSTEMS
         this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10]);
         this.slides = new Slides((Motor) components[4], (Motor) components[5]);
+        this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
     }
 
 
@@ -85,21 +88,25 @@ public class Robot {
     }
 
 
-    // SLIDES
-    public void slidesGroundPreset(boolean pad_down) {
+    // SLIDES + V4B
+    public void groundPreset(boolean pad_down) {
         this.slides.runToPreset(Levels.GROUND);
+        this.v4b.runToPreset(Levels.GROUND);
     }
 
-    public void slidesLowPreset(boolean pad_left) {
+    public void lowPreset(boolean pad_left) {
         this.slides.runToPreset(Levels.LOW);
+        this.v4b.runToPreset(Levels.LOW);
     }
 
-    public void slidesMediumPreset(boolean pad_right) {
+    public void mediumPreset(boolean pad_right) {
         this.slides.runToPreset(Levels.MEDIUM);
+        this.v4b.runToPreset(Levels.MEDIUM);
     }
 
-    public void slidesHighPreset(boolean pad_up) {
+    public void highPreset(boolean pad_up) {
         this.slides.runToPreset(Levels.HIGH);
+        this.v4b.runToPreset(Levels.HIGH);
     }
 
 
