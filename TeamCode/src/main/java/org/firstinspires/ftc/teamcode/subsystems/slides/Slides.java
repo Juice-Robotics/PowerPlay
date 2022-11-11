@@ -46,7 +46,6 @@ public class Slides {
         controller1 = new PIDController(p, i , d);
         controller2 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        voltageCompensation = 13.2 / voltageSensor.getVoltage();
     }
 
 
@@ -58,6 +57,7 @@ public class Slides {
 //        double pid2 = controller2.calculate(slides2Pos, target);
         double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
 
+        voltageCompensation = 13.2 / voltageSensor.getVoltage();
         power1 = (pid1 + ff) * voltageCompensation;
 //        power2 = pid2 + ff;
 

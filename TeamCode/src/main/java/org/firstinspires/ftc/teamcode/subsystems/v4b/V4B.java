@@ -14,7 +14,7 @@ public class V4B {
     // TARGETS
     public double zeroTarget = 10;
     public double groundTarget = 10;
-    public double lowTarget = 50;
+    public double lowTarget = 150;
     public double midTarget = 220;
     public double highTarget = 190;
 
