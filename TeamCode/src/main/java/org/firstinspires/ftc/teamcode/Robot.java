@@ -88,25 +88,37 @@ public class Robot {
     }
 
 
-    // SLIDES + V4B
+    // SLIDES + V4B + CLAW PRESETS
     public void groundPreset(boolean pad_down) {
         this.slides.runToPreset(Levels.GROUND);
         this.v4b.runToPreset(Levels.GROUND);
+        this.claw.setYRotation(0);
+        this.claw.setXRotation(90);
     }
 
     public void lowPreset(boolean pad_left) {
         this.slides.runToPreset(Levels.LOW);
         this.v4b.runToPreset(Levels.LOW);
+        this.claw.setYRotation(90);
+        this.claw.setXRotation(180);
     }
 
     public void mediumPreset(boolean pad_right) {
         this.slides.runToPreset(Levels.MEDIUM);
         this.v4b.runToPreset(Levels.MEDIUM);
+        this.claw.setYRotation(90);
     }
 
     public void highPreset(boolean pad_up) {
         this.slides.runToPreset(Levels.HIGH);
         this.v4b.runToPreset(Levels.HIGH);
+        this.claw.clawY.servo.setPosition(0.5);
+    }
+
+    public void resetAllServos() {
+        this.v4b.setAngle(0);
+        this.claw.setXRotation(0);
+        this.claw.clawY.servo.setPosition(0);
     }
 
 
@@ -138,7 +150,7 @@ public class Robot {
         Motor frontRight = (Motor) components[3];
         frontLeft.setSpeed((float)powerFrontLeft);
         frontRight.setSpeed((float)powerFrontRight);
-        backLeft.setSpeed((float)powerBackLeft);
-        backRight.setSpeed((float)powerBackRight);
+        backLeft.setSpeed(-(float)powerBackLeft);
+        backRight.setSpeed(-(float)powerBackRight);
     }
 }

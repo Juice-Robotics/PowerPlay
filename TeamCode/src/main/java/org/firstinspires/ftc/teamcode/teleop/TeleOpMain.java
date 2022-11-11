@@ -32,14 +32,14 @@ public class TeleOpMain extends LinearOpMode {
 
             //DRIVE
             if (gamepad1.right_bumper){
-                x = -gamepad1.left_stick_x*0.25;
+                x = gamepad1.right_stick_x*0.25;
                 y = -gamepad1.left_stick_y*0.25;
-                rx = gamepad1.right_stick_x*0.25;
+                rx = gamepad1.left_stick_x*0.25;
 
             } else{
-                x = -gamepad1.left_stick_x;
+                x = gamepad1.right_stick_x;
                 y = -gamepad1.left_stick_y;
-                rx = gamepad1.right_stick_x;
+                rx = gamepad1.left_stick_x;
             }
             robot.setDrivePower(-x, y, rx);
 
@@ -62,6 +62,10 @@ public class TeleOpMain extends LinearOpMode {
                 robot.startClawX(false);
             }
 
+            if (gamepad1.circle) {
+                robot.resetAllServos();
+            }
+
             if (gamepad2.right_stick_x > 0.2) {
                 robot.startClawY(true);
             } else if (gamepad2.right_stick_x < -0.2) {
@@ -74,8 +78,8 @@ public class TeleOpMain extends LinearOpMode {
 
             robot.slides.update();
             telemetry.addData("v4b position target: ", robot.v4b.getAngle());
-            telemetry.addData("v4b1 position: ", robot.v4b.v4b1.getAngle());
-            telemetry.addData("v4b2 position: ", robot.v4b.v4b2.getAngle());
+            telemetry.addData("v4b1 position: ", robot.v4b.v4b1.servo.getPosition());
+            telemetry.addData("v4b2 position: ", robot.v4b.v4b2.servo.getPosition());
             telemetry.addData("x pressed?", gamepad1.cross);
             telemetry.addData("claw status: ", robot.claw.state);
             telemetry.addData("claw: ", robot.claw.claw.servo.getPosition());

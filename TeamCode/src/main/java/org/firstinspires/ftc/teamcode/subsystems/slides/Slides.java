@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.slides;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
@@ -18,6 +21,8 @@ public class Slides {
     public int target = 0;
     public Levels currentLevel = Levels.ZERO;
     private final double ticks_in_degrees = 700 / 180.0;
+    public double power1;
+    public double power2;
 
     public Motor slides1;
     public Motor slides2;
@@ -25,7 +30,7 @@ public class Slides {
     // TARGETS IN NEGATIVE
     public int zeroTarget = 0;
     public int groundTarget = -50;
-    public int lowTarget = -100;
+    public int lowTarget = -250;
     public int midTarget = -260;
     public int highTarget = -425;
 
@@ -34,9 +39,9 @@ public class Slides {
         this.slides1 = slides1;
         this.slides2 = slides2;
 
-        this.slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         controller1 = new PIDController(p, i , d);
         controller2 = new PIDController(p, i , d);
+        slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 
@@ -48,8 +53,8 @@ public class Slides {
         double pid2 = controller2.calculate(slides2Pos, target);
         double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
 
-        double power1 = pid1 + ff;
-        double power2 = pid2 + ff;
+        power1 = pid1 + ff;
+        power2 = pid2 + ff;
 
         slides1.motor.setPower(power1);
         slides2.motor.setPower(-power2);

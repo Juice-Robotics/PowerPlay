@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.claw;
 
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
 import org.firstinspires.ftc.teamcode.lib.Axis;
 
@@ -24,6 +26,7 @@ public class Claw {
         this.clawX1 = clawX1;
         this.clawX2 = clawX2;
         this.clawY = clawY;
+        this.clawX1.servo.setDirection(Servo.Direction.REVERSE);
     }
 
     public void toggle() {

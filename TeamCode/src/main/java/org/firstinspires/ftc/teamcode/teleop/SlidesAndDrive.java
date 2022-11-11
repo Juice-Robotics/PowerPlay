@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
@@ -26,6 +28,8 @@ public class SlidesAndDrive extends LinearOpMode {
                 new Motor(1, "slides1", hardwareMap, true),           //4
                 new Motor(2, "slides2", hardwareMap, true),           //5
         };
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 //        Motor slides1 = (Motor) components[4];
 //        Motor slides2 = (Motor) components[5];
@@ -112,6 +116,10 @@ public class SlidesAndDrive extends LinearOpMode {
 //            }
 
             telemetry.addData("slides target ", slides.target);
+            telemetry.addData("slides pos1", slides.slides1.motor.getCurrentPosition());
+            telemetry.addData("slides pos2", slides.slides2.motor.getCurrentPosition());
+            telemetry.addData("slides power 1", slides.power1);
+            telemetry.addData("slides power 2", slides.power2);
             telemetry.update();
 
             try {
