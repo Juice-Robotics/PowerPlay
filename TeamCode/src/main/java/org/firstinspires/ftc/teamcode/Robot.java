@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
@@ -61,9 +62,11 @@ public class Robot {
             new StepperServo(1, "clawServo", map),        //11
         };
 
+        VoltageSensor voltageSensor = map.voltageSensor.iterator().next();
+
         // INIT SUBSYSTEMS
         this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10]);
-        this.slides = new Slides((Motor) components[4], (Motor) components[5]);
+        this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
     }
 
@@ -92,27 +95,41 @@ public class Robot {
     public void groundPreset(boolean pad_down) {
         this.slides.runToPreset(Levels.GROUND);
         this.v4b.runToPreset(Levels.GROUND);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {}
         this.claw.setYRotation(0);
-        this.claw.setXRotation(90);
+        this.claw.setXRotation(170);
     }
 
     public void lowPreset(boolean pad_left) {
         this.slides.runToPreset(Levels.LOW);
         this.v4b.runToPreset(Levels.LOW);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {}
         this.claw.setYRotation(90);
-        this.claw.setXRotation(180);
+        this.claw.setXRotation(170);
     }
 
     public void mediumPreset(boolean pad_right) {
         this.slides.runToPreset(Levels.MEDIUM);
         this.v4b.runToPreset(Levels.MEDIUM);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {}
         this.claw.setYRotation(90);
+        this.claw.setXRotation(170);
     }
 
     public void highPreset(boolean pad_up) {
         this.slides.runToPreset(Levels.HIGH);
         this.v4b.runToPreset(Levels.HIGH);
-        this.claw.clawY.servo.setPosition(0.5);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {}
+        this.claw.clawY.servo.setPosition(90);
+        this.claw.setXRotation(170);
     }
 
     public void resetAllServos() {

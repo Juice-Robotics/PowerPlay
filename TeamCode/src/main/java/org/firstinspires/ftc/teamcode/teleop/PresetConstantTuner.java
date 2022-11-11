@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.lib.Component;
@@ -49,11 +50,12 @@ public class PresetConstantTuner extends OpMode {
                 new Motor(1, "slides1", hardwareMap, false), //6
                 new Motor(1, "slides2", hardwareMap, false), //7
         };
+        VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         // INIT SUBSYSTEMS
         claw = new Claw((StepperServo) components[5], (StepperServo) components[2], (StepperServo) components[3], (StepperServo) components[4]);
         v4b = new V4B((StepperServo) components[0], (StepperServo) components[1]);
-        slides = new Slides((Motor) components[6], (Motor) components[7]);
+        slides = new Slides((Motor) components[6], (Motor) components[7], voltageSensor);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 

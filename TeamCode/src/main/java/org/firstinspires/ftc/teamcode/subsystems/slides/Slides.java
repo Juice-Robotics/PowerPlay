@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.lib.Levels;
@@ -17,6 +18,7 @@ public class Slides {
 
     public double p = 0.06, i = 0, d = 0.002;
     public double f = 0.15;
+    double voltageCompensation;
 
     public int target = 0;
     public Levels currentLevel = Levels.ZERO;
@@ -26,6 +28,7 @@ public class Slides {
 
     public Motor slides1;
     public Motor slides2;
+    public VoltageSensor voltageSensor;
 
     // TARGETS IN NEGATIVE
     public int zeroTarget = 0;
@@ -35,29 +38,31 @@ public class Slides {
     public int highTarget = -425;
 
 
-    public Slides(Motor slides1, Motor slides2) {
+    public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {
         this.slides1 = slides1;
         this.slides2 = slides2;
+        this.voltageSensor = voltageSensor;
 
         controller1 = new PIDController(p, i , d);
         controller2 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        voltageCompensation = 13.2 / voltageSensor.getVoltage();
     }
 
 
     public void update() {
         int slides1Pos = slides1.motor.getCurrentPosition();
-        int slides2Pos = slides2.motor.getCurrentPosition();
+//        int slides2Pos = slides2.motor.getCurrentPosition();
 
         double pid1 = controller1.calculate(slides1Pos, target);
-        double pid2 = controller2.calculate(slides2Pos, target);
+//        double pid2 = controller2.calculate(slides2Pos, target);
         double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
 
-        power1 = pid1 + ff;
-        power2 = pid2 + ff;
+        power1 = (pid1 + ff) * voltageCompensation;
+//        power2 = pid2 + ff;
 
         slides1.motor.setPower(power1);
-        slides2.motor.setPower(-power2);
+        slides2.motor.setPower(-power1);
     }
 
     public void runToPosition(int ticks) {

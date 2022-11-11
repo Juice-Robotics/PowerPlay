@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.lib.Component;
 import org.firstinspires.ftc.teamcode.lib.Levels;
@@ -28,6 +29,7 @@ public class SlidesAndDrive extends LinearOpMode {
                 new Motor(1, "slides1", hardwareMap, true),           //4
                 new Motor(2, "slides2", hardwareMap, true),           //5
         };
+        VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -40,7 +42,7 @@ public class SlidesAndDrive extends LinearOpMode {
 //        slides1.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        slides2.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        Slides slides = new Slides((Motor) components[4], (Motor) components[5]);
+        Slides slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
 
         double x;
         double y;

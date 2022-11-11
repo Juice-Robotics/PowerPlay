@@ -13,10 +13,10 @@ public class V4B {
 
     // TARGETS
     public double zeroTarget = 10;
-    public double groundTarget = 20;
-    public double lowTarget = 25;
-    public double midTarget = 50;
-    public double highTarget = 50;
+    public double groundTarget = 10;
+    public double lowTarget = 50;
+    public double midTarget = 220;
+    public double highTarget = 190;
 
     public V4B(StepperServo servo1, StepperServo servo2) {
         this.v4b1 = servo1;
