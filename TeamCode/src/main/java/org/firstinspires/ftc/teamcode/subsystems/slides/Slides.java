@@ -35,7 +35,7 @@ public class Slides {
     public int groundTarget = -5;
     public int lowTarget = -100;
     public int midTarget = -200;
-    public int highTarget = -280;
+    public int highTarget = -310;
 
 
     public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {
