@@ -32,10 +32,10 @@ public class Slides {
 
     // TARGETS IN NEGATIVE
     public int zeroTarget = 0;
-    public int groundTarget = -50;
-    public int lowTarget = -250;
-    public int midTarget = -260;
-    public int highTarget = -425;
+    public int groundTarget = -5;
+    public int lowTarget = -100;
+    public int midTarget = -200;
+    public int highTarget = -280;
 
 
     public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {

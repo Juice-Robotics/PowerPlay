@@ -12,11 +12,11 @@ public class V4B {
     public double currentAngle;
 
     // TARGETS
-    public double zeroTarget = 10;
-    public double groundTarget = 10;
-    public double lowTarget = 150;
-    public double midTarget = 220;
-    public double highTarget = 190;
+    public double zeroTarget = 0;
+    public double groundTarget = 0;
+    public double lowTarget = 25;
+    public double midTarget = 50;
+    public double highTarget = 150;
 
     public V4B(StepperServo servo1, StepperServo servo2) {
         this.v4b1 = servo1;

@@ -26,7 +26,6 @@ public class PresetConstantTuner extends OpMode {
     public static double CLAW_X_2 = 0;
     public static double CLAW_Y = 0;
     public static double V4B_1 = 0;
-    public static double V4B_2 = 0;
     public static boolean SLIDES_ENABLED = true;
     public static int SLIDES = 0;
     Component[] components;
@@ -61,12 +60,15 @@ public class PresetConstantTuner extends OpMode {
 
     @Override
     public void loop() {
-        claw.clawX1.setAngle((float) CLAW_X_1*180);
-        claw.clawX2.setAngle((float) CLAW_X_2*180);
-        claw.setYRotation((float) CLAW_Y*180);
+//        claw.clawX1.setAngle((float) CLAW_X_1*180);
+//        claw.clawX2.setAngle((float) CLAW_X_2*180);
+        claw.clawY.servo.setPosition(CLAW_Y);
 
-        v4b.v4b1.setAngle((float) V4B_1*180);
-        v4b.v4b2.setAngle((float) V4B_2*180);
+        claw.clawX1.servo.setPosition(CLAW_X_1);
+        claw.clawX2.servo.setPosition(1-CLAW_X_1);
+
+        v4b.v4b1.servo.setPosition(V4B_1);
+        v4b.v4b2.servo.setPosition(1-V4B_1);
 
 
         if (SLIDES_ENABLED) {
@@ -82,7 +84,7 @@ public class PresetConstantTuner extends OpMode {
         telemetry.addData("claw y", claw.clawY.servo.getPosition());
         telemetry.addData("v4b1 target", V4B_1);
         telemetry.addData("v4b1", v4b.v4b1.servo.getPosition());
-        telemetry.addData("v4b2 target", V4B_2);
+        telemetry.addData("v4b2 target", V4B_1);
         telemetry.addData("v4b2", v4b.v4b2.servo.getPosition());
         telemetry.addData("slides pos1 ", slides.slides1.motor.getCurrentPosition());
         telemetry.addData("slides pos2 ", slides.slides2.motor.getCurrentPosition());

@@ -53,7 +53,7 @@ public class SlidesPIDFTuning extends OpMode {
         slides2.setPower(power2);
 
         telemetry.addData("pos1 ", slides1Pos);
-        telemetry.addData("pos2 ", slides2Pos);
+        telemetry.addData("pos2 ", -slides1Pos);
         telemetry.addData("target ", target);
         telemetry.update();
     }

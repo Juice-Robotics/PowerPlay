@@ -85,7 +85,10 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("claw: ", robot.claw.claw.servo.getPosition());
             telemetry.addData("d left? ", gamepad1.dpad_left);
             telemetry.addData("slides target: ", robot.slides.target);
+            telemetry.addData("slides pos: ", robot.slides.slides1.motor.getCurrentPosition());
+            telemetry.addData("slides power", robot.slides.power1);
             telemetry.addData("slides level: ", robot.slides.currentLevel);
+            telemetry.addData("voltage: ", robot.slides.voltageSensor.getVoltage());
             telemetry.update();
 
             try {
