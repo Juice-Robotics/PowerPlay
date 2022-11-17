@@ -11,16 +11,19 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.Motor;
+import org.firstinspires.ftc.teamcode.lib.motionprofiles.LinearMotionProfile;
 
 public class Slides {
     private PIDController controller1;
     private PIDController controller2;
+    public LinearMotionProfile targetController;
 
     public double p = 0.06, i = 0, d = 0.002;
     public double f = 0.15;
     double voltageCompensation;
+    double slope = 2.0;
 
-    public int target = 0;
+    public double target = 0;
     public Levels currentLevel = Levels.ZERO;
     private final double ticks_in_degrees = 700 / 180.0;
     public double power1;
@@ -46,10 +49,12 @@ public class Slides {
         controller1 = new PIDController(p, i , d);
         controller2 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        targetController = new LinearMotionProfile(slides1.motor.getCurrentPosition(), target, slope, 0.5, currentTime());
     }
 
 
     public void update() {
+        target = targetController.calculate(currentTime());
         int slides1Pos = slides1.motor.getCurrentPosition();
 //        int slides2Pos = slides2.motor.getCurrentPosition();
 
@@ -88,19 +93,24 @@ public class Slides {
                 currentLevel = level;*/
 //        }
         if (level == Levels.ZERO) {
-            target = zeroTarget;
+//            target = zeroTarget;
+            targetController.setTarget(target, zeroTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.GROUND) {
-            target = groundTarget;
+//            target = groundTarget;
+            targetController.setTarget(target, groundTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.LOW) {
-            target = lowTarget;
+//            target = lowTarget;
+            targetController.setTarget(target, lowTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.MEDIUM) {
-            target = midTarget;
+//            target = midTarget;
+            targetController.setTarget(target, midTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.HIGH) {
-            target = highTarget;
+//            target = highTarget;
+            targetController.setTarget(target, highTarget, 2, 0.5, currentTime());
             currentLevel = level;
         }
     }
@@ -109,6 +119,10 @@ public class Slides {
     public void resetAllEncoders(){
         slides1.resetEncoder();
         slides2.resetEncoder();
+    }
+
+    private long currentTime() {
+        return System.currentTimeMillis() / 1000;
     }
 
 }

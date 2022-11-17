@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -33,6 +34,10 @@ public class SlidesPIDFTuning extends OpMode {
         slides1 = hardwareMap.get(DcMotorEx.class, "slides1");
         slides2 = hardwareMap.get(DcMotorEx.class, "slides2");
         slides1.setDirection(DcMotorSimple.Direction.REVERSE);
+        slides1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slides2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slides1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slides2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
