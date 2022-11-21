@@ -54,7 +54,7 @@ public class Slides {
 
 
     public void update() {
-        target = targetController.calculate(currentTime());
+//        target = targetController.calculate(currentTime());
         int slides1Pos = slides1.motor.getCurrentPosition();
 //        int slides2Pos = slides2.motor.getCurrentPosition();
 
@@ -93,24 +93,24 @@ public class Slides {
                 currentLevel = level;*/
 //        }
         if (level == Levels.ZERO) {
-//            target = zeroTarget;
-            targetController.setTarget(target, zeroTarget, slope, 0.5, currentTime());
+            target = zeroTarget;
+//            targetController.setTarget(target, zeroTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.GROUND) {
-//            target = groundTarget;
-            targetController.setTarget(target, groundTarget, slope, 0.5, currentTime());
+            target = groundTarget;
+//            targetController.setTarget(target, groundTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.LOW) {
-//            target = lowTarget;
-            targetController.setTarget(target, lowTarget, slope, 0.5, currentTime());
+            target = lowTarget;
+//            targetController.setTarget(target, lowTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.MEDIUM) {
-//            target = midTarget;
-            targetController.setTarget(target, midTarget, slope, 0.5, currentTime());
+            target = midTarget;
+//            targetController.setTarget(target, midTarget, slope, 0.5, currentTime());
             currentLevel = level;
         } else if (level == Levels.HIGH) {
-//            target = highTarget;
-            targetController.setTarget(target, highTarget, 2, 0.5, currentTime());
+            target = highTarget;
+//            targetController.setTarget(target, highTarget, 2, 0.5, currentTime());
             currentLevel = level;
         }
     }

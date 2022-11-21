@@ -183,90 +183,85 @@ public class Blue1 extends LinearOpMode
         }
 
         TrajectorySequence fullCycles = robot.drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-12, 56), Math.toRadians(-90))
-                .splineTo(new Vector2d(-3, 30), Math.toRadians(-75))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
-                .back(5.0)
+                .forward(50)
+                .splineTo(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-12, 13), Math.toRadians(-30))
-                .splineTo(new Vector2d(-61, 12), Math.toRadians(180))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPosition(50);
-                    robot.claw.toggle();
-                })
+                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPosition(50);
+//                    robot.claw.toggle();
+//                })
+                .splineToConstantHeading(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                .forward(5)
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
-                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPosition(50);
-                    robot.claw.toggle();
-                })
+                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPosition(50);
+//                    robot.claw.toggle();
+//                })
+                .splineToConstantHeading(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                .back(5)
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
-                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPosition(50);
-                    robot.claw.toggle();
-                })
+                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPosition(50);
+//                    robot.claw.toggle();
+//                })
+                .splineToConstantHeading(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                .forward(5)
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
-                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPosition(50);
-                    robot.claw.toggle();
-                })
+                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPosition(50);
+//                    robot.claw.toggle();
+//                })
+                .splineToConstantHeading(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                .back(5)
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
-                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPosition(50);
-                    robot.claw.toggle();
-                })
+                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPosition(50);
+//                    robot.claw.toggle();
+//                })
+                .splineToConstantHeading(new Vector2d(-35, 0), 270)
+//                .addDisplacementMarker(() -> {
+//                    robot.slides.runToPreset(Levels.HIGH);
+//                    robot.claw.toggle();
+//                    sleep(500);
+//                    robot.slides.runToPreset(Levels.GROUND);
+//                })
 
-                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                .forward(5)
-                .addDisplacementMarker(() -> {
-                    robot.slides.runToPreset(Levels.HIGH);
-                    robot.claw.toggle();
-                    sleep(500);
-                    robot.slides.runToPreset(Levels.GROUND);
-                })
                 .splineTo(new Vector2d(-30, 11), Math.toRadians(270))
 
                 .build();
+
+        robot.drive.followTrajectorySequence(fullCycles);
 
 
         /* Actually do something useful */

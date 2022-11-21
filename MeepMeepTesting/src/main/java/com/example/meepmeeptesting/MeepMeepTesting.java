@@ -20,35 +20,53 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 58, Math.toRadians(-90)))
 
-                               .splineTo(new Vector2d(-12, 56), Math.toRadians(-90))
+//                               .splineTo(new Vector2d(-12, 56), Math.toRadians(-90))
+//
+//                               .splineTo(new Vector2d(-3, 30), Math.toRadians(-75))
+//
+//                                .back(5.0)
+//
+//                                .splineTo(new Vector2d(-12, 13), Math.toRadians(-30))
+//9
+//                                .splineTo(new Vector2d(-61, 12), Math.toRadians(180))
+                                .forward(50)
+                                .splineTo(new Vector2d(-35, 0), 270)
 
-                               .splineTo(new Vector2d(-3, 30), Math.toRadians(-75))
+                                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+                                .splineToConstantHeading(new Vector2d(-35, 0), 270)
 
-                                .back(5.0)
+                                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+                                .splineToConstantHeading(new Vector2d(-35, 0), 270)
 
-                                .splineTo(new Vector2d(-12, 13), Math.toRadians(-30))
+                                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+                                .splineToConstantHeading(new Vector2d(-35, 0), 270)
 
-                                .splineTo(new Vector2d(-61, 12), Math.toRadians(180))
+                                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+                                .splineToConstantHeading(new Vector2d(-35, 0), 270)
 
-                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                                .forward(5)
-                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-61, 11), 270)
+                                .splineToConstantHeading(new Vector2d(-35, 0), 270)
 
-                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                                .back(5)
-                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-
-                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                                .forward(5)
-                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-
-                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                                .back(5)
-                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
-
-                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
-                                .forward(5)
-                                .splineTo(new Vector2d(-30, 11), Math.toRadians(270))
+//                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
+//                                .forward(5)
+//                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
+//
+//                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
+//                                .back(5)
+//                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
+//
+//                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
+//                                .forward(5)
+//                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
+//
+//                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
+//                                .back(5)
+//                                .splineTo(new Vector2d(-61, 12), Math.toRadians(0))
+//
+//                                .splineTo(new Vector2d(-23, 7), Math.toRadians(270))
+//                                .forward(5)
+//                                .splineTo(new Vector2d(-30, 11), Math.toRadians(270))
+                                // END
 //
 //                               .splineTo(new Vector2d(-28, 30), Math.toRadians(0))
 //
