@@ -20,8 +20,7 @@ public class TeleOpMain extends LinearOpMode {
         double y;
         double rx;
 
-        Gamepad previousGamepad1 = new Gamepad();
-        Gamepad previousGamepad2 = new Gamepad();
+        boolean previousClawState = false;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -54,7 +53,7 @@ public class TeleOpMain extends LinearOpMode {
                 robot.highPreset(gamepad1.left_bumper);
 
             //CLAW
-            if (gamepad1.cross)
+            if (gamepad1.cross && !previousClawState)
                 robot.toggleClaw(gamepad1.x);
             if (gamepad2.left_stick_y > 0.2) {
                 robot.startClawX(true);
@@ -91,12 +90,7 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("voltage: ", robot.slides.voltageSensor.getVoltage());
             telemetry.update();
 
-            try {
-                previousGamepad1.copy(gamepad1);
-                previousGamepad2.copy(gamepad2);
-            } catch (RobotCoreException e) {
-                
-            }
+            previousClawState = gamepad1.cross;
         }
     }
 }
