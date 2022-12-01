@@ -2,26 +2,33 @@ package org.firstinspires.ftc.teamcode.subsystems.slides;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.Motor;
-import org.firstinspires.ftc.teamcode.lib.motionprofiles.LinearMotionProfile;
 
 public class Slides {
     private PIDController controller1;
     private PIDController controller2;
-    public LinearMotionProfile targetController;
 
-    public double p = 0.06, i = 0, d = 0.002;
-    public double f = 0.15;
+    private MotionProfile profile;
+    public MotionState curState;
+    private ElapsedTime timer;
+    double maxvel = 0.0;
+    double maxaccel = 0.0;
+
+    public double p = 0.009, i = 0.01, d = 0.0005;
+    public double f = -0.003;
     double voltageCompensation;
-    double slope = 2.0;
 
     public double target = 0;
     public Levels currentLevel = Levels.ZERO;
@@ -34,11 +41,11 @@ public class Slides {
     public VoltageSensor voltageSensor;
 
     // TARGETS IN NEGATIVE
-    public int zeroTarget = 0;
-    public int groundTarget = -5;
-    public int lowTarget = -100;
-    public int midTarget = -200;
-    public int highTarget = -310;
+    public int zeroTarget = -10;
+    public int groundTarget = -10;
+    public int lowTarget = -250;
+    public int midTarget = -700;
+    public int highTarget = -1090;
 
 
     public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {
@@ -49,12 +56,16 @@ public class Slides {
         controller1 = new PIDController(p, i , d);
         controller2 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        targetController = new LinearMotionProfile(slides1.motor.getCurrentPosition(), target, slope, 0.5, currentTime());
+
+        timer = new ElapsedTime();
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
     }
 
 
     public void update() {
-//        target = targetController.calculate(currentTime());
+        MotionState state = profile.get(timer.time());
+        target = state.getX();
+
         int slides1Pos = slides1.motor.getCurrentPosition();
 //        int slides2Pos = slides2.motor.getCurrentPosition();
 
@@ -66,8 +77,14 @@ public class Slides {
         power1 = (pid1 + ff) * voltageCompensation;
 //        power2 = pid2 + ff;
 
-        slides1.motor.setPower(power1);
-        slides2.motor.setPower(-power1);
+        if (target == groundTarget){
+            slides1.motor.setPower(power1*0.3);
+            slides2.motor.setPower(-power1*0.3);
+        }
+        else {
+            slides1.motor.setPower(power1);
+            slides2.motor.setPower(-power1);
+        }
     }
 
     public void runToPosition(int ticks) {
@@ -89,28 +106,33 @@ public class Slides {
 //                target = midTarget;
 //                currentLevel = level;
 //            case HIGH:
-                /*target = lowTarget;
-                currentLevel = level;*/
+               /*target = lowTarget;
+               currentLevel = level;*/
 //        }
         if (level == Levels.ZERO) {
-            target = zeroTarget;
-//            targetController.setTarget(target, zeroTarget, slope, 0.5, currentTime());
+//            target = zeroTarget;
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(zeroTarget, 0), maxvel, maxaccel);
+            timer.reset();
             currentLevel = level;
         } else if (level == Levels.GROUND) {
-            target = groundTarget;
-//            targetController.setTarget(target, groundTarget, slope, 0.5, currentTime());
+//            target = groundTarget;
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(groundTarget, 0), maxvel, maxaccel);
+            timer.reset();
             currentLevel = level;
         } else if (level == Levels.LOW) {
-            target = lowTarget;
-//            targetController.setTarget(target, lowTarget, slope, 0.5, currentTime());
+//            target = lowTarget;
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(lowTarget, 0), maxvel, maxaccel);
+            timer.reset();
             currentLevel = level;
         } else if (level == Levels.MEDIUM) {
-            target = midTarget;
-//            targetController.setTarget(target, midTarget, slope, 0.5, currentTime());
+//            target = midTarget;
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(midTarget, 0), maxvel, maxaccel);
+            timer.reset();
             currentLevel = level;
         } else if (level == Levels.HIGH) {
-            target = highTarget;
-//            targetController.setTarget(target, highTarget, 2, 0.5, currentTime());
+//            target = highTarget;
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(highTarget, 0), maxvel, maxaccel);
+            timer.reset();
             currentLevel = level;
         }
     }
@@ -121,8 +143,8 @@ public class Slides {
         slides2.resetEncoder();
     }
 
-    private long currentTime() {
-        return System.currentTimeMillis() / 1000;
+    private int getPos() {
+        return slides1.motor.getCurrentPosition();
     }
 
 }
