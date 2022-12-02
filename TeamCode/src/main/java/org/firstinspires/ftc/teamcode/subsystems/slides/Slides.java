@@ -13,8 +13,11 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.Motor;
+
+import java.util.function.Function;
 
 public class Slides {
     private PIDController controller1;
@@ -46,6 +49,8 @@ public class Slides {
     public int lowTarget = -250;
     public int midTarget = -700;
     public int highTarget = -1090;
+
+    private boolean threadState = false;
 
 
     public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {
@@ -135,6 +140,28 @@ public class Slides {
             timer.reset();
             currentLevel = level;
         }
+    }
+
+    public void launchAsThread(Telemetry telemetry) {
+        threadState = true;
+        telemetry.addData("Slides Threads State:", "STARTING");
+        telemetry.update();
+        Thread t1 = new Thread(() -> {
+            telemetry.addData("Slides Threads State:", "STARTED");
+            telemetry.update();
+            while (threadState == true) {
+                update();
+            }
+            telemetry.addData("Slides Threads State:", "STOPPED");
+            telemetry.update();
+        });
+        t1.start();
+    }
+
+    public void destroyThreads(Telemetry telemetry) {
+        telemetry.addData("Slides Threads State:", "STOPPING");
+        telemetry.update();
+        threadState = false;
     }
 
 

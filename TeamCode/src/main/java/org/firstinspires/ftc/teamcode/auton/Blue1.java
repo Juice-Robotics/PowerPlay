@@ -179,6 +179,8 @@ public class Blue1 extends LinearOpMode {
 //            telemetry.update();
 //        }
 
+            robot.slides.launchAsThread(telemetry);
+
             TrajectorySequence fullCycles = robot.drive.trajectorySequenceBuilder(startPose)
                     .forward(50)
                     .splineTo(new Vector2d(-35, 0), 270)
@@ -258,7 +260,7 @@ public class Blue1 extends LinearOpMode {
 
                     .build();
 
-            telemetry.addData("robot positiion", robot.drive.getPoseEstimate());
+            telemetry.addData("robot position", robot.drive.getPoseEstimate());
             robot.drive.followTrajectorySequence(fullCycles);
 
 
@@ -271,6 +273,7 @@ public class Blue1 extends LinearOpMode {
                 // insert trajectory code
             }
 
+            robot.slides.destroyThreads(telemetry);
 
             /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
 //            while (opModeIsActive()) {
