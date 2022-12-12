@@ -269,17 +269,17 @@ public class Blue1 extends LinearOpMode {
             if (tagOfInterest == null || tagOfInterest.id == LEFT) {
                 // insert trajectory code
                 parkTrajectory = robot.drive.trajectorySequenceBuilder(fullCycles.end())
-                        .splineTo(new Vector2d(33, 58), fullCycles.end().getHeading())
+                        .splineTo(new Vector2d(57, 10), fullCycles.end().getHeading())
                         .build();
             } else if (tagOfInterest.id == MIDDLE) {
                 // insert trajectory code
                 parkTrajectory = robot.drive.trajectorySequenceBuilder(fullCycles.end())
-                        .splineTo(new Vector2d(33, 38), fullCycles.end().getHeading())
+                        .splineTo(new Vector2d(35, 10), fullCycles.end().getHeading())
                         .build();
             } else if (tagOfInterest.id == RIGHT) {
                 // insert trajectory code
                 parkTrajectory = robot.drive.trajectorySequenceBuilder(fullCycles.end())
-                        .splineTo(new Vector2d(33, 8), fullCycles.end().getHeading())
+                        .splineTo(new Vector2d(10, 10), fullCycles.end().getHeading())
                         .build();
             }
 

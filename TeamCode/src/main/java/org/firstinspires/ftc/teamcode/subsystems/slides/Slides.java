@@ -1,30 +1,22 @@
 package org.firstinspires.ftc.teamcode.subsystems.slides;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.Motor;
 
-import java.util.function.Function;
 
 public class Slides {
     private PIDController controller1;
-    private PIDController controller2;
 
     private MotionProfile profile;
-    public MotionState curState;
     private ElapsedTime timer;
     double maxvel = 0.0;
     double maxaccel = 0.0;
@@ -59,7 +51,6 @@ public class Slides {
         this.voltageSensor = voltageSensor;
 
         controller1 = new PIDController(p, i , d);
-        controller2 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         timer = new ElapsedTime();
@@ -72,15 +63,12 @@ public class Slides {
         target = state.getX();
 
         int slides1Pos = slides1.motor.getCurrentPosition();
-//        int slides2Pos = slides2.motor.getCurrentPosition();
 
         double pid1 = controller1.calculate(slides1Pos, target);
-//        double pid2 = controller2.calculate(slides2Pos, target);
         double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
 
         voltageCompensation = 13.2 / voltageSensor.getVoltage();
         power1 = (pid1 + ff) * voltageCompensation;
-//        power2 = pid2 + ff;
 
         if (target == groundTarget){
             slides1.motor.setPower(power1*0.3);
@@ -97,45 +85,23 @@ public class Slides {
     }
 
     public void runToPreset(Levels level) {
-//        switch (level) {
-//            case ZERO:
-//                target = zeroTarget;
-//                currentLevel = level;
-//            case GROUND:
-//                target = groundTarget;
-//                currentLevel = level;
-//            case LOW:
-//                target = lowTarget;
-//                currentLevel = level;
-//            case MEDIUM:
-//                target = midTarget;
-//                currentLevel = level;
-//            case HIGH:
-               /*target = lowTarget;
-               currentLevel = level;*/
-//        }
         if (level == Levels.ZERO) {
-//            target = zeroTarget;
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(zeroTarget, 0), maxvel, maxaccel);
             timer.reset();
             currentLevel = level;
         } else if (level == Levels.GROUND) {
-//            target = groundTarget;
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(groundTarget, 0), maxvel, maxaccel);
             timer.reset();
             currentLevel = level;
         } else if (level == Levels.LOW) {
-//            target = lowTarget;
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(lowTarget, 0), maxvel, maxaccel);
             timer.reset();
             currentLevel = level;
         } else if (level == Levels.MEDIUM) {
-//            target = midTarget;
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(midTarget, 0), maxvel, maxaccel);
             timer.reset();
             currentLevel = level;
         } else if (level == Levels.HIGH) {
-//            target = highTarget;
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(highTarget, 0), maxvel, maxaccel);
             timer.reset();
             currentLevel = level;
@@ -144,22 +110,22 @@ public class Slides {
 
     public void launchAsThread(Telemetry telemetry) {
         threadState = true;
-        telemetry.addData("Slides Threads State:", "STARTING");
+        telemetry.addData("Slides Threads Status:", "STARTING");
         telemetry.update();
         Thread t1 = new Thread(() -> {
-            telemetry.addData("Slides Threads State:", "STARTED");
+            telemetry.addData("Slides Threads Status:", "STARTED");
             telemetry.update();
             while (threadState == true) {
                 update();
             }
-            telemetry.addData("Slides Threads State:", "STOPPED");
+            telemetry.addData("Slides Threads Status:", "STOPPED");
             telemetry.update();
         });
         t1.start();
     }
 
     public void destroyThreads(Telemetry telemetry) {
-        telemetry.addData("Slides Threads State:", "STOPPING");
+        telemetry.addData("Slides Threads Status:", "STOPPING");
         telemetry.update();
         threadState = false;
     }

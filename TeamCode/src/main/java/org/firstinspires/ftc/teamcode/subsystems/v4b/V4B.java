@@ -21,7 +21,6 @@ public class V4B {
     public V4B(StepperServo servo1, StepperServo servo2) {
         this.v4b1 = servo1;
         this.v4b2 = servo2;
-//        v4b1.servo.setDirection(Servo.Direction.REVERSE);
         v4b2.servo.setDirection(Servo.Direction.REVERSE);
     }
 
@@ -36,18 +35,6 @@ public class V4B {
     }
 
     public void runToPreset(Levels level) {
-//        switch (level) {
-//            case ZERO:
-//                this.setAngle(zeroTarget);
-//            case GROUND:
-//                this.setAngle(groundTarget);
-//            case LOW:
-//                this.setAngle(lowTarget);
-//            case MEDIUM:
-//                this.setAngle(midTarget);
-//            case HIGH:
-//                this.setAngle(highTarget);
-//        }
         if (level == Levels.ZERO) {
             this.setAngle(zeroTarget);
         } else if (level == Levels.GROUND) {

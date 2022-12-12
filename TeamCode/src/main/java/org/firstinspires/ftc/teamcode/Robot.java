@@ -21,6 +21,7 @@ public class Robot {
 
     // STATE VARS
     // example: clawToggled = false;
+    Levels currentPosition = Levels.GROUND;
 
 
     // POSE
@@ -78,6 +79,16 @@ public class Robot {
         this.claw.toggle();
     }
 
+    public void advancedToggleClaw(boolean x) {
+        if (currentPosition == Levels.GROUND) {
+            this.claw.toggle();
+        } else if (currentPosition != Levels.ZERO) {
+            this.claw.toggle();
+//            sleep(500);
+            groundPreset(false);
+        }
+    }
+
     public void startClawX(boolean direction) {
         this.claw.startXRotation(direction);
     }
@@ -95,9 +106,7 @@ public class Robot {
     public void groundPreset(boolean pad_down) {
         this.slides.runToPreset(Levels.GROUND);
         this.v4b.runToPreset(Levels.GROUND);
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {}
+        sleep(500);
         this.claw.setYRotation(0);
         this.claw.setXRotation(170);
     }
@@ -105,9 +114,7 @@ public class Robot {
     public void lowPreset(boolean pad_left) {
         this.slides.runToPreset(Levels.LOW);
         this.v4b.runToPreset(Levels.LOW);
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {}
+        sleep(500);
         this.claw.setYRotation(90);
         this.claw.setXRotation(170);
     }
@@ -115,9 +122,7 @@ public class Robot {
     public void mediumPreset(boolean pad_right) {
         this.slides.runToPreset(Levels.MEDIUM);
         this.v4b.runToPreset(Levels.MEDIUM);
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {}
+        sleep(500);
         this.claw.setYRotation(90);
         this.claw.setXRotation(170);
     }
@@ -125,9 +130,7 @@ public class Robot {
     public void highPreset(boolean pad_up) {
         this.slides.runToPreset(Levels.HIGH);
         this.v4b.runToPreset(Levels.HIGH);
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {}
+        sleep(500);
         this.claw.clawY.servo.setPosition(90);
         this.claw.setXRotation(170);
     }
@@ -169,5 +172,11 @@ public class Robot {
         frontRight.setSpeed((float)powerFrontRight);
         backLeft.setSpeed(-(float)powerBackLeft);
         backRight.setSpeed(-(float)powerBackRight);
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {}
     }
 }

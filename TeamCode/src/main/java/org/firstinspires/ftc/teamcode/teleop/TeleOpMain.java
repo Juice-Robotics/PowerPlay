@@ -4,8 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
@@ -13,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Robot;
 public class TeleOpMain extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize your own robot class
+        // Initialize robot class
         Robot robot = new Robot(hardwareMap,false);
 
         double x;
@@ -35,7 +33,7 @@ public class TeleOpMain extends LinearOpMode {
                 y = -gamepad1.left_stick_y*0.25;
                 rx = gamepad1.left_stick_x*0.25;
 
-            } else{
+            } else {
                 x = gamepad1.right_stick_x;
                 y = -gamepad1.left_stick_y;
                 rx = gamepad1.left_stick_x;
@@ -54,7 +52,7 @@ public class TeleOpMain extends LinearOpMode {
 
             //CLAW
             if (gamepad1.cross && !previousClawState)
-                robot.toggleClaw(gamepad1.x);
+                robot.advancedToggleClaw(gamepad1.x);
             if (gamepad2.left_stick_y > 0.2) {
                 robot.startClawX(true);
             } else if (gamepad2.left_stick_y < -0.2) {
@@ -71,9 +69,6 @@ public class TeleOpMain extends LinearOpMode {
                 robot.startClawY(false);
             }
 
-//            if (gamepad2.b && !previousGamepad2.b)
-//                robot.resetClawRotation(gamepad2.b);
-//            if (gamepad1.)
 
             robot.slides.update();
             telemetry.addData("v4b position target: ", robot.v4b.getAngle());
