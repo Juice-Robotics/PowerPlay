@@ -253,7 +253,7 @@ public class LeftCyclesFSM extends LinearOpMode {
                         robot.v4b.setAngle(218);
 
                         robot.claw.toggle();
-                        robot.robotOff(true, -290);
+                        robot.robotOff(true, (-290 - (200 * cycle)));
                     }
                     currentState = AutonStates.PARK;
                     break;
