@@ -31,10 +31,12 @@ public class ClawSensor {
                 if (sensorValue == redColor) {
                     return true;
                 }
+                break;
             case BLUE:
                 if (sensorValue == blueColor) {
                     return true;
                 }
+                break;
         }
 
         // Return false if color provided is BOTH or if the color was not detected

@@ -36,7 +36,13 @@ public class Robot {
     public SampleMecanumDrive drive;
     boolean auton;
 
-
+    public enum StarterStack {
+        FIVE,
+        FOUR,
+        THREE,
+        TWO,
+        ONE
+    }
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -135,6 +141,49 @@ public class Robot {
         this.claw.setXRotation(170);
     }
 
+    public void starterStackPreset(StarterStack level) {
+        switch (level) {
+            case FIVE:
+                this.slides.runToPosition(-50);
+                this.v4b.runToPreset(Levels.HIGH);
+                sleep(500);
+                this.claw.clawY.servo.setPosition(90);
+                this.claw.setXRotation(170);
+            case FOUR:
+                this.slides.runToPosition(-50);
+                this.v4b.runToPreset(Levels.HIGH);
+                sleep(500);
+                this.claw.clawY.servo.setPosition(90);
+                this.claw.setXRotation(170);
+            case THREE:
+                this.slides.runToPosition(-50);
+                this.v4b.runToPreset(Levels.HIGH);
+                sleep(500);
+                this.claw.clawY.servo.setPosition(90);
+                this.claw.setXRotation(170);
+            case TWO:
+                this.slides.runToPosition(-50);
+                this.v4b.runToPreset(Levels.HIGH);
+                sleep(500);
+                this.claw.clawY.servo.setPosition(90);
+                this.claw.setXRotation(170);
+            case ONE:
+                this.slides.runToPosition(-50);
+                this.v4b.runToPreset(Levels.HIGH);
+                sleep(500);
+                this.claw.clawY.servo.setPosition(90);
+                this.claw.setXRotation(170);
+        }
+    }
+
+    public void robotOff(boolean pad_left, int ticks) {
+        this.slides.runToPosition(ticks);
+        this.claw.setXRotation(5);
+        sleep(100);
+        this.v4b.runToPreset(Levels.GROUND);
+        this.claw.setYRotation(0);
+    }
+
     public void resetAllServos() {
         this.v4b.setAngle(0);
         this.claw.setXRotation(0);
@@ -172,6 +221,10 @@ public class Robot {
         frontRight.setSpeed((float)powerFrontRight);
         backLeft.setSpeed(-(float)powerBackLeft);
         backRight.setSpeed(-(float)powerBackRight);
+    }
+
+    public void resetEncoders() {
+        slides.resetAllEncoders();
     }
 
     private void sleep(long ms) {
