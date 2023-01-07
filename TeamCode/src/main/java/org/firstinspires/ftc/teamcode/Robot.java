@@ -141,6 +141,12 @@ public class Robot {
         this.claw.setXRotation(170);
     }
 
+    public void dropPreset() {
+        this.slides.runToPosition(this.slides.slides1.motor.getCurrentPosition() - 200);
+        sleep(500);
+        this.claw.toggle();
+    }
+
     public void starterStackPreset(StarterStack level) {
         switch (level) {
             case FIVE:

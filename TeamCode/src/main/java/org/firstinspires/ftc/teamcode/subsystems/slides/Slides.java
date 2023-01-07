@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,6 +35,7 @@ public class Slides {
     public Motor slides1;
     public Motor slides2;
     public VoltageSensor voltageSensor;
+    public DigitalChannel limitSwitch;
 
     // TARGETS IN NEGATIVE
     public int zeroTarget = -10;
@@ -45,13 +47,15 @@ public class Slides {
     private boolean threadState = false;
 
 
-    public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor) {
+    public Slides(Motor slides1, Motor slides2, VoltageSensor voltageSensor, DigitalChannel limitSwitch) {
         this.slides1 = slides1;
         this.slides2 = slides2;
         this.voltageSensor = voltageSensor;
+        this.limitSwitch = limitSwitch;
 
         controller1 = new PIDController(p, i , d);
         slides1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.limitSwitch.setMode(DigitalChannel.Mode.INPUT);
 
         timer = new ElapsedTime();
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
@@ -130,6 +134,19 @@ public class Slides {
         threadState = false;
     }
 
+    public boolean pollInitPosition() {
+        return limitSwitch.getState();
+    }
+
+    public void runToInit() {
+        while (limitSwitch.getState()) {
+            slides1.setSpeed((float) 0.25);
+            slides2.setSpeed((float) 0.25);
+        }
+        slides1.setSpeed(0);
+        slides2.setSpeed(0);
+        resetAllEncoders();
+    }
 
     public void resetAllEncoders(){
         slides1.resetEncoder();

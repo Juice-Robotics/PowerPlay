@@ -211,6 +211,7 @@ public class LeftCyclesFSM extends LinearOpMode {
                     .build();
         }
 
+        // Start loop, stops when opmode is stopped or it reaches complete state
         while (!isStopRequested() && currentState != AutonStates.COMPLETE) {
             switch (currentState) {
                 case INIT:
@@ -232,6 +233,8 @@ public class LeftCyclesFSM extends LinearOpMode {
                     currentState = AutonStates.CYCLE;
                     break;
                 case CYCLE:
+                    // CYCLE 1
+                    // Uses special path since it starts from the end of preload
                     robot.drive.followTrajectorySequence(preloadToStack);
                     robot.claw.toggle();
                     robot.slides.runToPosition(-700);
@@ -243,6 +246,7 @@ public class LeftCyclesFSM extends LinearOpMode {
                     robot.claw.toggle();
                     robot.robotOff(true, -290);
 
+                    // CYCLES 2 - n
                     for (int cycle = 2; cycle <= 4; cycle++) {
                         robot.drive.followTrajectorySequence(highJunctionToStack);
                         robot.claw.toggle();
