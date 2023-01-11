@@ -89,7 +89,7 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("v4b2 position: ", robot.v4b.v4b2.servo.getPosition());
             telemetry.addData("x pressed?", gamepad1.cross);
             telemetry.addData("claw status: ", robot.claw.state);
-            telemetry.addData("claw: ", robot.claw.claw.servo.getPosition());
+            telemetry.addData("claw sensor: ", robot.claw.sensor.getRawARGB());
             telemetry.addData("d left? ", gamepad1.dpad_left);
             telemetry.addData("slides target: ", robot.slides.target);
             telemetry.addData("slides pos: ", robot.slides.slides1.motor.getCurrentPosition());
