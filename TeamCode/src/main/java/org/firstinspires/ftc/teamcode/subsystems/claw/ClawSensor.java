@@ -37,6 +37,10 @@ public class ClawSensor {
                     return true;
                 }
                 break;
+            case BOTH:
+                if (sensorValue == blueColor || sensorValue == redColor) {
+                    return true;
+                }
         }
 
         // Return false if color provided is BOTH or if the color was not detected

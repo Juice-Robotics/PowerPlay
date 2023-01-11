@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.claw;
 
+import android.graphics.Color;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
@@ -10,6 +13,7 @@ public class Claw {
     public StepperServo clawX1;
     public StepperServo clawX2;
     public StepperServo clawY;
+    public ClawSensor sensor;
 
     public boolean state = false; // if open, true
 
@@ -21,12 +25,13 @@ public class Claw {
     public double clawXStep = 0.1;
     public double clawYStep = 0.1;
 
-    public Claw(StepperServo claw, StepperServo clawX1, StepperServo clawX2, StepperServo clawY) {
+    public Claw(StepperServo claw, StepperServo clawX1, StepperServo clawX2, StepperServo clawY, ColorSensor sensor) {
         this.claw = claw;
         this.clawX1 = clawX1;
         this.clawX2 = clawX2;
         this.clawY = clawY;
         this.clawX1.servo.setDirection(Servo.Direction.REVERSE);
+        this.sensor = new ClawSensor(sensor);
     }
 
     public void toggle() {

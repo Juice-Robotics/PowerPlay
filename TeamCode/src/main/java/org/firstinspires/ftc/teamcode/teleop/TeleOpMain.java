@@ -4,8 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.lib.AllianceColor;
 
 @TeleOp(group = "competition")
 public class TeleOpMain extends LinearOpMode {
@@ -19,6 +21,8 @@ public class TeleOpMain extends LinearOpMode {
         double rx;
 
         boolean previousClawState = false;
+        boolean previousClawSensorState = false;
+        ElapsedTime clawSensorTimeout = new ElapsedTime();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -59,6 +63,15 @@ public class TeleOpMain extends LinearOpMode {
                 robot.startClawX(false);
             }
 
+            if (!previousClawSensorState && robot.claw.sensor.conePresent(AllianceColor.BOTH) && clawSensorTimeout.time() >= 2000) {
+                gamepad1.rumble(500);
+                robot.claw.toggle();
+            }
+
+            if (previousClawSensorState && !robot.claw.sensor.conePresent(AllianceColor.BOTH)) {
+                clawSensorTimeout.reset();
+            }
+
             if (gamepad1.circle) {
                 robot.resetAllServos();
             }
@@ -86,6 +99,7 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.update();
 
             previousClawState = gamepad1.cross;
+            previousClawSensorState = robot.claw.sensor.conePresent(AllianceColor.BOTH);
         }
     }
 }
