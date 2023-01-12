@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.*;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -72,8 +75,8 @@ public class Robot {
         VoltageSensor voltageSensor = map.voltageSensor.iterator().next();
 
         // INIT SUBSYSTEMS
-        this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10]);
-        this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
+        this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10], map.colorSensor.get("colorSensor"));
+        this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor, (DigitalChannel) map.analogInput.get("limitSwitch"));
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
     }
 
