@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.v4b;
 
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
@@ -10,6 +14,11 @@ public class V4B {
     public StepperServo v4b2;
 
     public double currentAngle;
+
+    private MotionProfile profile;
+    private ElapsedTime timer;
+    double maxvel = 0.0;
+    double maxaccel = 0.0;
 
     // TARGETS
     public double zeroTarget = 10;
@@ -22,11 +31,16 @@ public class V4B {
         this.v4b1 = servo1;
         this.v4b2 = servo2;
         v4b2.servo.setDirection(Servo.Direction.REVERSE);
+
+        timer = new ElapsedTime();
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
     }
 
     public void setAngle(double angle) {
-        this.v4b1.setAngle((float) angle);
-        this.v4b2.setAngle((float) angle);
+//        this.v4b1.setAngle((float) angle);
+//        this.v4b2.setAngle((float) angle);
+        timer = new ElapsedTime();
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
         this.currentAngle = angle;
     }
 
@@ -46,5 +60,11 @@ public class V4B {
         } else if (level == Levels.HIGH) {
             this.setAngle(highTarget);
         }
+    }
+
+    public void update() {
+        double angle = profile.get(timer.time()).getX();
+        this.v4b1.setAngle((float) angle);
+        this.v4b2.setAngle((float) angle);
     }
 }
