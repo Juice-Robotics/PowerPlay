@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
 
@@ -14,6 +15,7 @@ public class V4B {
     public StepperServo v4b2;
 
     public double currentAngle;
+    public boolean threadState;
 
     private MotionProfile profile;
     private ElapsedTime timer;
@@ -40,7 +42,7 @@ public class V4B {
 //        this.v4b1.setAngle((float) angle);
 //        this.v4b2.setAngle((float) angle);
         timer = new ElapsedTime();
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(this.v4b1.getAngle(), 0), new MotionState(angle, 0), maxvel, maxaccel);
         this.currentAngle = angle;
     }
 
@@ -66,5 +68,27 @@ public class V4B {
         double angle = profile.get(timer.time()).getX();
         this.v4b1.setAngle((float) angle);
         this.v4b2.setAngle((float) angle);
+    }
+
+    public void launchAsThread(Telemetry telemetry) {
+        threadState = true;
+        telemetry.addData("V4B Threads Status:", "STARTING");
+        telemetry.update();
+        Thread t1 = new Thread(() -> {
+            telemetry.addData("V4B Threads Status:", "STARTED");
+            telemetry.update();
+            while (threadState == true) {
+                update();
+            }
+            telemetry.addData("V4B Threads Status:", "STOPPED");
+            telemetry.update();
+        });
+        t1.start();
+    }
+
+    public void destroyThreads(Telemetry telemetry) {
+        telemetry.addData("V4B Threads Status:", "STOPPING");
+        telemetry.update();
+        threadState = false;
     }
 }
