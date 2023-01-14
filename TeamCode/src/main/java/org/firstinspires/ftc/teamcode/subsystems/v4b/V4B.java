@@ -43,6 +43,7 @@ public class V4B {
 //        this.v4b2.setAngle((float) angle);
         timer = new ElapsedTime();
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(this.v4b1.getAngle(), 0), new MotionState(angle, 0), maxvel, maxaccel);
+        timer.reset();
         this.currentAngle = angle;
     }
 
