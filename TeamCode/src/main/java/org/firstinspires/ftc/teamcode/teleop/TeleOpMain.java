@@ -22,6 +22,8 @@ public class TeleOpMain extends LinearOpMode {
 
         boolean previousClawState = false;
         boolean previousClawSensorState = false;
+        boolean autoCloseEnabled = true;
+        boolean autoClosePreviousState = false;
         ElapsedTime clawSensorTimeout = new ElapsedTime();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -63,18 +65,22 @@ public class TeleOpMain extends LinearOpMode {
                 robot.startClawX(false);
             }
 
-            if (!previousClawSensorState && robot.claw.sensor.conePresent(AllianceColor.BOTH) && clawSensorTimeout.time() >= 2000) {
+            if (gamepad1.circle && !autoClosePreviousState) {
+                autoCloseEnabled = !autoCloseEnabled;
+            }
+
+            if (!previousClawSensorState && robot.claw.sensor.conePresent() && clawSensorTimeout.time() >= 2000 && autoCloseEnabled) {
                 gamepad1.rumble(500);
                 robot.claw.toggle();
             }
 
-            if (previousClawSensorState && !robot.claw.sensor.conePresent(AllianceColor.BOTH)) {
+            if (previousClawSensorState && !robot.claw.sensor.conePresent() && clawSensorTimeout.time() >= 2000 && autoCloseEnabled) {
                 clawSensorTimeout.reset();
             }
 
-            if (gamepad1.circle) {
-                robot.resetAllServos();
-            }
+//            if (gamepad1.circle) {
+//                robot.resetAllServos();
+//            }
 
             if (gamepad2.right_stick_x > 0.2) {
                 robot.startClawY(true);
@@ -99,7 +105,8 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.update();
 
             previousClawState = gamepad1.cross;
-            previousClawSensorState = robot.claw.sensor.conePresent(AllianceColor.BOTH);
+            previousClawSensorState = robot.claw.sensor.conePresent();
+            autoClosePreviousState = gamepad1.circle;
         }
     }
 }

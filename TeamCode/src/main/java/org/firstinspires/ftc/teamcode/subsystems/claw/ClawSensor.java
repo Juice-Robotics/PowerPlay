@@ -13,7 +13,7 @@ public class ClawSensor {
     int redColor = 0;
     int blueColor = 0;
 
-    DistanceUnit unit = DistanceUnit.CM;
+    DistanceUnit unit = DistanceUnit.MM;
 
     public ClawSensor(ColorSensor sensor) {
         this.sensor = sensor;
@@ -23,24 +23,11 @@ public class ClawSensor {
         return sensor.argb();
     }
 
-    public boolean conePresent(AllianceColor color) {
-        int sensorValue = sensor.argb();
+    public boolean conePresent() {
+        double sensorValue = getRange();
 
-        switch (color) {
-            case RED:
-                if (sensorValue == redColor) {
-                    return true;
-                }
-                break;
-            case BLUE:
-                if (sensorValue == blueColor) {
-                    return true;
-                }
-                break;
-            case BOTH:
-                if (sensorValue == blueColor || sensorValue == redColor) {
-                    return true;
-                }
+        if (sensorValue >= 1.0 && sensorValue <= 10.0) {
+            return true;
         }
 
         // Return false if color provided is BOTH or if the color was not detected
