@@ -129,9 +129,6 @@ public class Robot {
             thread.start();
         }
     }
-    public void startClawX(boolean direction) {
-        this.claw.startXRotation(direction);
-    }
 
     public void startClawY(boolean direction) {
         this.claw.startYRotation(direction);
@@ -148,7 +145,6 @@ public class Robot {
     // SLIDES + V4B + CLAW PRESETS
     public void groundPreset(boolean pad_down) {
         this.slides.runToPreset(Levels.GROUND);
-        this.claw.setXRotation(7);
         try {
             Thread.sleep(100);
         } catch (Exception e) {}
@@ -161,7 +157,6 @@ public class Robot {
         this.slides.runToPreset(Levels.LOW);
         this.v4b.runToPreset(Levels.LOW);
         this.claw.setYRotation(142);
-        this.claw.setXRotation(156);
         currentPosition = Levels.LOW;
         this.guide.setGuideDown();
     }
@@ -170,7 +165,6 @@ public class Robot {
         this.slides.runToPreset(Levels.MEDIUM);
         this.v4b.runToPreset(Levels.MEDIUM);
         this.claw.setYRotation(142);
-        this.claw.setXRotation(156);
         currentPosition = Levels.MEDIUM;
         this.guide.setGuideDown();
     }
@@ -182,7 +176,6 @@ public class Robot {
         } catch (Exception e) {}
         this.v4b.runToPreset(Levels.HIGH);
         this.claw.setYRotation(142);
-        this.claw.setXRotation(156);
         currentPosition = Levels.HIGH;
         this.guide.setGuideDown();
     }
@@ -194,13 +187,11 @@ public class Robot {
         } catch (Exception e) {}
         this.v4b.runToPreset(Levels.HIGH);
         this.claw.setYRotation(62);
-        this.claw.setXRotation(166);
         currentPosition = Levels.HIGH;
     }
 
     public void starterStack1(boolean pad_left) {
         this.slides.runToPreset(Levels.STARTSTACK1);
-        this.claw.setXRotation(3);
         try {
             Thread.sleep(100);
         } catch (Exception e) {}
@@ -212,11 +203,9 @@ public class Robot {
     public void autoHigh(boolean pad_up) {
         this.v4b.runToPreset(Levels.AUTOHIGH);
         this.claw.setYRotation(142);
-        this.claw.setXRotation(166);
     }
 
     public void autoLow(boolean pad_down) {
-        this.claw.setXRotation(7);
         try {
             Thread.sleep(100);
         } catch (Exception e) {}
@@ -226,7 +215,6 @@ public class Robot {
 
     public void autoInit(boolean pad_left) {
         this.v4b.runToPreset(Levels.AUTOINIT);
-        this.claw.setXRotation(80);
         this.claw.setYRotation(142);
     }
 
@@ -244,7 +232,6 @@ public class Robot {
 
     public void resetAllServos() {
         this.v4b.setAngle(0);
-        this.claw.setXRotation(0);
         this.claw.clawY.servo.setPosition(0);
         this.guide.setGuideRotation(0);
         this.retractodo.setRetractServoRotation(0);
