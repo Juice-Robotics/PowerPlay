@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.subsystems.claw;
 
 import android.graphics.Color;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
 import org.firstinspires.ftc.teamcode.lib.Axis;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+
 
 public class Claw {
     public StepperServo claw;
@@ -15,12 +16,13 @@ public class Claw {
     public StepperServo clawY;
     public ClawSensor sensor;
 
-    public boolean state = false; // if open, true
+
+    public boolean isOpen = false; // if open, true
 
     // CONSTANTS
-    public double clawOpen = 0.75;
-    public double clawClose = 1;
-    public float clawXReset = 0;
+    public double clawOpen = 0.4;
+    public double clawClose = 0.9;
+    public float clawXReset = 25;
     public float clawYReset = 0;
     public double clawXStep = 0.1;
     public double clawYStep = 0.1;
@@ -30,21 +32,35 @@ public class Claw {
         this.clawX1 = clawX1;
         this.clawX2 = clawX2;
         this.clawY = clawY;
-        this.clawX1.servo.setDirection(Servo.Direction.REVERSE);
+        this.clawX2.servo.setDirection(Servo.Direction.REVERSE);
+        this.clawY.servo.setDirection(Servo.Direction.REVERSE);
         this.sensor = new ClawSensor(sensor);
+    }
+
+    public void setPositionClaw(double angle) {
+        // Close Claw
+        this.claw.servo.setPosition(angle);
     }
 
     public void toggle() {
         // Close Claw
-        if (this.state) {
+        if (this.isOpen) {
             this.claw.servo.setPosition(clawClose);
-            this.state = false;
+            this.isOpen = false;
         }
         // Open Claw
         else {
             this.claw.servo.setPosition(clawOpen);
-            this.state = true;
+            this.isOpen = true;
         }
+    }
+
+    public void setClawOpen() {
+        this.claw.servo.setPosition(clawOpen);
+    }
+
+    public void setClawClose() {
+        this.claw.servo.setPosition(clawClose);
     }
 
     public void setXRotation(float rotation) {

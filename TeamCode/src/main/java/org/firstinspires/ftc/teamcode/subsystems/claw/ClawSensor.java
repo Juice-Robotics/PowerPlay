@@ -10,8 +10,6 @@ public class ClawSensor {
     ColorSensor sensor;
 
     // Constants of the cone colors
-    int redColor = 0;
-    int blueColor = 0;
 
     DistanceUnit unit = DistanceUnit.MM;
 
@@ -26,7 +24,7 @@ public class ClawSensor {
     public boolean conePresent() {
         double sensorValue = getRange();
 
-        if (sensorValue >= 1.0 && sensorValue <= 10.0) {
+        if (sensorValue >= 1.0 && sensorValue <= 45.0) {
             return true;
         }
 

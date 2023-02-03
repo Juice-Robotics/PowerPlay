@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.auton;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -25,7 +22,7 @@ import java.util.ArrayList;
 @Config
 @Autonomous(group = "drive")
 
-public class BlueLeft extends LinearOpMode {
+public class LeftStackCONSISTENT extends LinearOpMode {
 
     Robot robot;
     OpenCvCamera camera;
@@ -57,10 +54,11 @@ public class BlueLeft extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         robot = new Robot(hardwareMap, true);
-        Pose2d startPose = new Pose2d(-in(92), in(160), rad(90));
+        Pose2d startPose = new Pose2d(in(92), in(160), rad(90));
         drive.setPoseEstimate(startPose);
         robot.claw.setPositionClaw(0.8);
         robot.autoInit(true);
+        robot.retractodo.setRetractUp();
 
         TrajectorySequence preloadTrajectory = drive.trajectorySequenceBuilder(startPose)
                 .back(50)
@@ -70,11 +68,11 @@ public class BlueLeft extends LinearOpMode {
                 })
                 .setReversed(true)
                 .addDisplacementMarker(32, ()-> {
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
-                .splineTo(new Vector2d(-30.5,7), Math.toRadians(180 - 221.781))
+                .splineTo(new Vector2d(30.5,7), Math.toRadians(221.780999988))
                 .addDisplacementMarker(54,()->{
-                    robot.slides.runToPosition(-330);
+                    robot.slides.runToPosition(-310);
                 })
                 .addTemporalMarker(2.3, ()->{
                     robot.claw.setClawOpen();
@@ -87,27 +85,30 @@ public class BlueLeft extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(-57,8.3), Math.toRadians(180))
+                .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
                 .build();
 
         TrajectorySequence stackToHighTrajectory1 = drive.trajectorySequenceBuilder(poleToStackTrajectory1.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 224.6459))
+                .splineTo(new Vector2d(31,6), Math.toRadians(221.780999988))
                 .addTemporalMarker(1, ()->{
                     robot.autoHigh(true);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(1.3, ()->{
-                    robot.slides.runToPosition(-280);
+                    robot.slides.runToPosition(-220);
                 })
                 .addTemporalMarker(1.7,()->{
                     robot.claw.setClawOpen();
+                })
+                .addTemporalMarker(1.5, ()->{
+                    robot.guide.setGuideUp();
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -116,29 +117,35 @@ public class BlueLeft extends LinearOpMode {
                 .addTemporalMarker(0, ()->{
                     robot.autoLow(true);
                 })
+                .addTemporalMarker(0.7, ()->{
+                    robot.guide.setGuideDown();
+                })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(-57,8.3), Math.toRadians(180))
+                .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
                 .build();
 
         TrajectorySequence stackToHighTrajectory2 = drive.trajectorySequenceBuilder(poleToStackTrajectory2.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 224.6459))
+                .splineTo(new Vector2d(31,6), Math.toRadians(221.780999988))
                 .addTemporalMarker(1, ()->{
                     robot.autoHigh(true);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(1.3, ()->{
-                    robot.slides.runToPosition(-230);
+                    robot.slides.runToPosition(-140);
                 })
                 .addTemporalMarker(1.7,()->{
                     robot.claw.setClawOpen();
+                })
+                .addTemporalMarker(1.5, ()->{
+                    robot.guide.setGuideUp();
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -147,28 +154,34 @@ public class BlueLeft extends LinearOpMode {
                 .addTemporalMarker(0, ()->{
                     robot.autoLow(true);
                 })
+                .addTemporalMarker(0.7, ()->{
+                    robot.guide.setGuideDown();
+                })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(-57,8.3), Math.toRadians(180))
+                .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
                 .build();
         TrajectorySequence stackToHighTrajectory3 = drive.trajectorySequenceBuilder(poleToStackTrajectory3.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 224.6459))
+                .splineTo(new Vector2d(31,6), Math.toRadians(221.780999988))
                 .addTemporalMarker(1, ()->{
                     robot.autoHigh(true);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(1.3, ()->{
-                    robot.slides.runToPosition(-180);
+                    robot.slides.runToPosition(-20);
                 })
                 .addTemporalMarker(1.7,()->{
                     robot.claw.setClawOpen();
+                })
+                .addTemporalMarker(1.5, ()->{
+                    robot.guide.setGuideUp();
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -177,20 +190,23 @@ public class BlueLeft extends LinearOpMode {
                 .addTemporalMarker(0, ()->{
                     robot.autoLow(true);
                 })
+                .addTemporalMarker(0.7, ()->{
+                    robot.guide.setGuideDown();
+                })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(-57,8.3), Math.toRadians(180))
+                .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
                 .build();
 
         TrajectorySequence stackToHighTrajectory4 = drive.trajectorySequenceBuilder(poleToStackTrajectory4.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 224.6459))
+                .splineTo(new Vector2d(31,6), Math.toRadians(221.780999988))
                 .addTemporalMarker(1, ()->{
                     robot.autoHigh(true);
                 })
@@ -200,6 +216,9 @@ public class BlueLeft extends LinearOpMode {
                 })
                 .addTemporalMarker(1.7,()->{
                     robot.claw.setClawOpen();
+                })
+                .addTemporalMarker(1.5, ()->{
+                    robot.guide.setGuideUp();
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -208,20 +227,23 @@ public class BlueLeft extends LinearOpMode {
                 .addTemporalMarker(0, ()->{
                     robot.autoLow(true);
                 })
+                .addTemporalMarker(0.7, ()->{
+                    robot.guide.setGuideDown();
+                })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(-57,8.3), Math.toRadians(180))
+                .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
-                    robot.slides.runToPreset(Levels.HIGH);
+                    robot.slides.runToPreset(Levels.AUTOHIGH);
                 })
                 .build();
 
         TrajectorySequence stackToHighTrajectory5 = drive.trajectorySequenceBuilder(poleToStackTrajectory5.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 224.6459))
+                .splineTo(new Vector2d(31,6), Math.toRadians(221.780999988))
                 .addTemporalMarker(1, ()->{
                     robot.autoHigh(true);
                 })
@@ -231,6 +253,9 @@ public class BlueLeft extends LinearOpMode {
                 })
                 .addTemporalMarker(1.7,()->{
                     robot.claw.setClawOpen();
+                })
+                .addTemporalMarker(1.5, ()->{
+                    robot.guide.setGuideUp();
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -245,7 +270,7 @@ public class BlueLeft extends LinearOpMode {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(1280,720, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(1280,720, OpenCvCameraRotation.SIDEWAYS_RIGHT);
             }
 
             @Override
@@ -281,6 +306,7 @@ public class BlueLeft extends LinearOpMode {
                 if(tagFound)
                 {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    telemetry.addData("Location: ", tagOfInterest.id);
                 }
                 else
                 {
@@ -353,26 +379,26 @@ public class BlueLeft extends LinearOpMode {
 
         TrajectorySequence parkTrajectory = null;
         /* Actually do something useful */
-        if (tagOfInterest == null || tagOfInterest.id == RIGHT) {
+        if (tagOfInterest == null || tagOfInterest.id == LEFT) {
             // insert trajectory code
             parkTrajectory = robot.drive.trajectorySequenceBuilder(stackToHighTrajectory5.end())
                     .waitSeconds(0.5)
                     .setReversed(false)
-                    .splineTo(new Vector2d(-60,9), Math.toRadians(180))
+                    .splineTo(new Vector2d(60,9), 0)
                     .build();
         } else if (tagOfInterest.id == MIDDLE) {
             // insert trajectory code
             parkTrajectory = robot.drive.trajectorySequenceBuilder(stackToHighTrajectory5.end())
                     .waitSeconds(0.5)
                     .setReversed(false)
-                    .splineTo(new Vector2d(-34,6), Math.toRadians(180 - 221.781))
+                    .splineTo(new Vector2d(36,12), 0)
                     .build();
-        } else if (tagOfInterest.id == LEFT) {
+        } else if (tagOfInterest.id == RIGHT) {
             // insert trajectory code
             parkTrajectory = robot.drive.trajectorySequenceBuilder(stackToHighTrajectory5.end())
                     .waitSeconds(0.5)
                     .setReversed(false)
-                    .splineTo(new Vector2d(-35,13), Math.toRadians(180))
+                    .splineTo(new Vector2d(35,13), 0)
                     .back(22)
                     .build();
         }

@@ -5,5 +5,9 @@ public enum Levels {
     GROUND,
     LOW,
     MEDIUM,
-    HIGH
+    HIGH,
+    STARTSTACK1,
+    AUTOHIGH,
+    AUTOLOW,
+    AUTOINIT
 }

@@ -35,7 +35,7 @@ public class Motor extends Component{
 
     public void setTarget(int ticks){
 
-          motor.setTargetPosition(ticks);
+        motor.setTargetPosition(ticks);
 
     }
 

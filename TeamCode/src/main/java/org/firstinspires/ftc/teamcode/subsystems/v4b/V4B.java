@@ -1,12 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.v4b;
 
-import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
-import com.acmerobotics.roadrunner.profile.MotionState;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.lib.StepperServo;
 
@@ -15,35 +8,25 @@ public class V4B {
     public StepperServo v4b2;
 
     public double currentAngle;
-    public boolean threadState;
-
-    private MotionProfile profile;
-    private ElapsedTime timer;
-    double maxvel = 0.0;
-    double maxaccel = 0.0;
 
     // TARGETS
     public double zeroTarget = 10;
     public double groundTarget = 10;
-    public double lowTarget = 255;
-    public double midTarget = 190;
-    public double highTarget = 220;
+    public double lowTarget = 170;
+    public double midTarget = 160;
+    public double highTarget = 163; //145 auton
+    public double autoHigh = 159.5;
+    public double autoInit = 210;
 
     public V4B(StepperServo servo1, StepperServo servo2) {
         this.v4b1 = servo1;
         this.v4b2 = servo2;
-        v4b2.servo.setDirection(Servo.Direction.REVERSE);
-
-        timer = new ElapsedTime();
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), maxvel, maxaccel);
+//        v4b1.servo.setDirection(Servo.Direction.REVERSE);
     }
 
     public void setAngle(double angle) {
-//        this.v4b1.setAngle((float) angle);
-//        this.v4b2.setAngle((float) angle);
-        timer = new ElapsedTime();
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(this.v4b1.servo.getPosition(), 0), new MotionState(angle, 0), maxvel, maxaccel);
-        timer.reset();
+        this.v4b1.setAngle((float) angle);
+        this.v4b2.setAngle((float) angle);
         this.currentAngle = angle;
     }
 
@@ -52,6 +35,18 @@ public class V4B {
     }
 
     public void runToPreset(Levels level) {
+//        switch (level) {
+//            case ZERO:
+//                this.setAngle(zeroTarget);
+//            case GROUND:
+//                this.setAngle(groundTarget);
+//            case LOW:
+//                this.setAngle(lowTarget);
+//            case MEDIUM:
+//                this.setAngle(midTarget);
+//            case HIGH:
+//                this.setAngle(highTarget);
+//        }
         if (level == Levels.ZERO) {
             this.setAngle(zeroTarget);
         } else if (level == Levels.GROUND) {
@@ -62,34 +57,10 @@ public class V4B {
             this.setAngle(midTarget);
         } else if (level == Levels.HIGH) {
             this.setAngle(highTarget);
+        } else if (level == Levels.AUTOINIT) {
+            this.setAngle(autoInit);
+        } else if (level == Levels.AUTOHIGH) {
+            this.setAngle(autoHigh);
         }
-    }
-
-    public void update() {
-        double angle = profile.get(timer.time()).getX();
-        this.v4b1.setAngle((float) angle);
-        this.v4b2.setAngle((float) angle);
-    }
-
-    public void launchAsThread(Telemetry telemetry) {
-        threadState = true;
-        telemetry.addData("V4B Threads Status:", "STARTING");
-        telemetry.update();
-        Thread t1 = new Thread(() -> {
-            telemetry.addData("V4B Threads Status:", "STARTED");
-            telemetry.update();
-            while (threadState == true) {
-                update();
-            }
-            telemetry.addData("V4B Threads Status:", "STOPPED");
-            telemetry.update();
-        });
-        t1.start();
-    }
-
-    public void destroyThreads(Telemetry telemetry) {
-        telemetry.addData("V4B Threads Status:", "STOPPING");
-        telemetry.update();
-        threadState = false;
     }
 }

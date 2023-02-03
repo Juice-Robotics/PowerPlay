@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 @Config
 @TeleOp
 public class SlidesPIDFTuning extends OpMode {
@@ -60,6 +62,8 @@ public class SlidesPIDFTuning extends OpMode {
         telemetry.addData("pos1 ", slides1Pos);
         telemetry.addData("pos2 ", -slides1Pos);
         telemetry.addData("target ", target);
+        telemetry.addData("motor 1 current", slides1.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("motor 2 current", slides2.getCurrent(CurrentUnit.AMPS));
         telemetry.update();
     }
 }
