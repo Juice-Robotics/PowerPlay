@@ -91,9 +91,9 @@ public class TeleOpMain extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
-                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() + 1));
+//                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() + 1));
             } else if (gamepad2.dpad_down) {
-                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() - 1));
+//                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() - 1));
             }
 
             if (gamepad2.dpad_right) {

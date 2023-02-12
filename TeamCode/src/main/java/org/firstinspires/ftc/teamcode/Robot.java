@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.*;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.guide.Guide;
+import org.firstinspires.ftc.teamcode.subsystems.relocalization.Relocalization;
 import org.firstinspires.ftc.teamcode.subsystems.retractOdo.retractOdo;
 import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.v4b.V4B;
@@ -24,6 +27,7 @@ public class Robot {
     public V4B v4b;
     public retractOdo retractodo;
     public Guide guide;
+    public Relocalization relocalizer;
 
 
     // STATE VARS
@@ -88,6 +92,7 @@ public class Robot {
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
         this.guide = new Guide((StepperServo) components[13]);
         this.retractodo = new retractOdo((StepperServo) components[12]);
+        this.relocalizer = new Relocalization(map, false);
     }
 
 
@@ -268,5 +273,9 @@ public class Robot {
         frontRight.setSpeed((float)powerFrontRight);
         backLeft.setSpeed(-(float)powerBackLeft);
         backRight.setSpeed(-(float)powerBackRight);
+    }
+
+    public Pose2d relocalize() {
+        return relocalizer.relocalize();
     }
 }

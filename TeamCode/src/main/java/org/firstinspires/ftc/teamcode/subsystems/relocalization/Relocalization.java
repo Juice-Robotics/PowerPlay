@@ -33,7 +33,7 @@ public class Relocalization {
     private double STARTER_STACK_WALL_X = 72;
     private double ADJACENT_WALL_Y = 72;
 
-    enum DistanceSensor {
+    public enum DistanceSensor {
         FRONT_LEFT,
         FRONT_RIGHT,
         LEFT,
@@ -54,10 +54,10 @@ public class Relocalization {
     }
 
     public Relocalization(HardwareMap hardwareMap, boolean reversed) {
-        frontLeftSensor = new MB1242(hardwareMap, "frontLeftDistanceSensor");
-        frontRightSensor = new MB1242(hardwareMap, "frontRightDistanceSensor");
-        leftSensor = new MB1242(hardwareMap, "leftDistanceSensor");
-        rightSensor = new MB1242(hardwareMap, "rightDistanceSensor");
+        frontLeftSensor = new MB1242(hardwareMap, "flDistanceSensor");
+        frontRightSensor = new MB1242(hardwareMap, "frDistanceSensor");
+        leftSensor = new MB1242(hardwareMap, "lSensor");
+        rightSensor = new MB1242(hardwareMap, "rDistanceSensor");
         this.reversed = reversed;
 
         poseEstimate = new Pose2d(0, 0, 0);
@@ -67,6 +67,8 @@ public class Relocalization {
     }
 
     public Pose2d relocalize() {
+        double angleToWall = 0;
+
         // GET SENSOR VALUES
         // get 3 bursts of detections so the low-pass will be as accurate as possible
         frontLeftRaw = frontLeftSensor.getDistance(unit);
@@ -90,12 +92,12 @@ public class Relocalization {
             heading = 0;
         } else if (frontLeftRaw < frontRightRaw) {
             // TILTED RIGHT
-            double angleToWall = Math.atan((frontRightRaw - frontLeftRaw) / DISTANCE_BETWEEN_FRONT);
+            angleToWall = Math.atan((frontRightRaw - frontLeftRaw) / DISTANCE_BETWEEN_FRONT);
 
             heading = Math.toRadians(90 - angleToWall);
         } else if (frontLeftRaw > frontRightRaw) {
             // TILTED RIGHT
-            double angleToWall = Math.atan((frontLeftRaw - frontRightRaw) / DISTANCE_BETWEEN_FRONT);
+            angleToWall = Math.atan((frontLeftRaw - frontRightRaw) / DISTANCE_BETWEEN_FRONT);
 
             heading = Math.toRadians(270 + angleToWall);
         }
@@ -104,11 +106,11 @@ public class Relocalization {
         if (frontLeftRaw == frontRightRaw) {
             x = STARTER_STACK_WALL_X - ((frontRightRaw + frontLeftRaw) / 2);
         } else {
-            x = STARTER_STACK_WALL_X - (Math.sin(90 - heading) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_CENTER_OFFSET));
+            x = STARTER_STACK_WALL_X - (Math.sin(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_CENTER_OFFSET));
         }
 
         // CALCULATE Y
-        y = ADJACENT_WALL_Y - Math.sin(heading) * (frontLeftRaw + LEFT_TO_CENTER_OFFSET);
+        y = ADJACENT_WALL_Y - Math.cos(90 -angleToWall) * (frontLeftRaw + LEFT_TO_CENTER_OFFSET);
 
         // CLEANUP
         if (reversed) {

@@ -5,10 +5,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
+import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
+import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 import com.qualcomm.robotcore.util.TypeConversion;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@I2cDeviceType
+@DeviceProperties(
+        name = "MB1242",
+        description = "ultrasonic distance sensor",
+        xmlTag = "MB1242"
+)
 public class MB1242 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements DistanceSensor {
     private long lastRun = 0;
     private long runDelayMs = 100;
