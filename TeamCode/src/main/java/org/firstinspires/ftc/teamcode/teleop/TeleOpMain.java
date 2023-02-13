@@ -127,13 +127,6 @@ public class TeleOpMain extends LinearOpMode {
                 robot.startClawY(false);
             }
 
-            //GUIDE AND RETRACT
-            boolean isPressed1 = gamepad1.triangle;
-            if (gamepad1.triangle && !previousGuideState) {
-                robot.toggleGuide();
-            }
-            previousGuideState = isPressed1;
-
             boolean isPressed2 = gamepad1.square;
             if (gamepad1.square && !previousRetractState) {
                 robot.toggleRetract();
@@ -152,7 +145,6 @@ public class TeleOpMain extends LinearOpMode {
             telemetry.addData("slides level: ", robot.slides.currentLevel);
             telemetry.addData("voltage: ", robot.slides.voltageSensor.getVoltage());
             telemetry.addData("retractpos", robot.retractodo.state);
-            telemetry.addData("guidepos", robot.guide.state);
             telemetry.update();
 
         }

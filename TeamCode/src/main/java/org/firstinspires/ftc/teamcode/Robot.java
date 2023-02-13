@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.guide.Guide;
 import org.firstinspires.ftc.teamcode.subsystems.relocalization.Relocalization;
 import org.firstinspires.ftc.teamcode.subsystems.retractOdo.retractOdo;
 import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
@@ -26,7 +25,6 @@ public class Robot {
     public Slides slides;
     public V4B v4b;
     public retractOdo retractodo;
-    public Guide guide;
     public Relocalization relocalizer;
 
 
@@ -80,8 +78,6 @@ public class Robot {
                 new StepperServo(1, "clawServo", map),        //11
 
                 new StepperServo(1, "retractOdo", map),       //12
-
-                new StepperServo(0, "guideServo", map),       //13
         };
 
         VoltageSensor voltageSensor = map.voltageSensor.iterator().next();
@@ -90,7 +86,6 @@ public class Robot {
         this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10], map.colorSensor.get("colorSensor"));
         this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
-        this.guide = new Guide((StepperServo) components[13]);
         this.retractodo = new retractOdo((StepperServo) components[12]);
         this.relocalizer = new Relocalization(map, false);
     }
@@ -103,19 +98,12 @@ public class Robot {
         this.retractodo.toggle();
     }
 
-    //GUIDE
-    public void toggleGuide() {
-        this.guide.toggle();
-    }
-
     //CLAW
     public void advancedToggleClaw() {
         if (currentPosition == Levels.GROUND) {
-            guide.setGuideUp();
             this.claw.toggle();
         } else {
             this.slides.runToPreset(Levels.GROUND);
-            guide.setGuideUp();
             this.claw.toggle();
 //            try {
 //                this.slides.launchAsThreadBasic();
@@ -163,7 +151,6 @@ public class Robot {
         this.v4b.runToPreset(Levels.LOW);
         this.claw.setYRotation(142);
         currentPosition = Levels.LOW;
-        this.guide.setGuideDown();
     }
 
     public void mediumPreset(boolean pad_right) {
@@ -171,7 +158,6 @@ public class Robot {
         this.v4b.runToPreset(Levels.MEDIUM);
         this.claw.setYRotation(142);
         currentPosition = Levels.MEDIUM;
-        this.guide.setGuideDown();
     }
 
     public void highPreset(boolean pad_up) {
@@ -182,7 +168,6 @@ public class Robot {
         this.v4b.runToPreset(Levels.HIGH);
         this.claw.setYRotation(142);
         currentPosition = Levels.HIGH;
-        this.guide.setGuideDown();
     }
 
     public void sidewaysPickup(boolean pad_up) {
@@ -202,7 +187,6 @@ public class Robot {
         } catch (Exception e) {}
         this.v4b.runToPreset(Levels.GROUND);
         this.claw.setYRotation(0);
-        this.guide.toggle();
     }
 
     public void autoHigh(boolean pad_up) {
@@ -238,7 +222,6 @@ public class Robot {
     public void resetAllServos() {
         this.v4b.setAngle(0);
         this.claw.clawY.servo.setPosition(0);
-        this.guide.setGuideRotation(0);
         this.retractodo.setRetractServoRotation(0);
     }
 
