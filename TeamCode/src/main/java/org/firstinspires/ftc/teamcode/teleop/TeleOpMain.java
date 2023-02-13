@@ -59,16 +59,9 @@ public class TeleOpMain extends LinearOpMode {
                 .forward(10)
                 .build();
 
-        Gamepad previousGamepad1 = new Gamepad();
-        Gamepad previousGamepad2 = new Gamepad();
-
-        ElapsedTime timer;
-        timer = new ElapsedTime();
-
         boolean autoCloseEnabled = true;
         boolean autoClosePreviousState = false;
         boolean previousClawState = false;
-        boolean previousGuideState = false;
         boolean previousRetractState = false;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

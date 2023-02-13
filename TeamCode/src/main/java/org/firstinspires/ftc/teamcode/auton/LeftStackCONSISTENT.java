@@ -83,6 +83,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
+                    robot.safeRelocalize();
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
@@ -114,6 +115,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
+                    robot.safeRelocalize();
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
@@ -145,6 +147,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
+                    robot.safeRelocalize();
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
@@ -175,6 +178,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
+                    robot.safeRelocalize();
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
@@ -206,6 +210,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(56.5,8.3), Math.toRadians(0))
                 .addTemporalMarker(1.4, ()->{
+                    robot.safeRelocalize();
                     robot.claw.setClawClose();
                 })
                 .addTemporalMarker(2.6, ()->{
@@ -374,7 +379,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
         drive.followTrajectorySequence(parkTrajectory);
 
         robot.slides.destroyThreads(telemetry);
-        while (!isStopRequested() && opModeIsActive()) ;
+        while (!isStopRequested() && opModeIsActive()) {};
     }
 
     public static double rad(double degrees) {

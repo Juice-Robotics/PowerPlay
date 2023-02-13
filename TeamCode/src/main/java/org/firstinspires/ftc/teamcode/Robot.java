@@ -258,7 +258,15 @@ public class Robot {
         backRight.setSpeed(-(float)powerBackRight);
     }
 
-    public Pose2d relocalize() {
-        return relocalizer.relocalize();
+    public void relocalize() {
+        Pose2d newPoseEstimate = relocalizer.relocalize();
+        drive.setPoseEstimate(newPoseEstimate);
+    }
+
+    public void safeRelocalize() {
+        Pose2d newPoseEstimate = relocalizer.relocalize();
+        if (Math.abs((newPoseEstimate.getX() - drive.getPoseEstimate().getX())) < 5 || Math.abs((newPoseEstimate.getY() - drive.getPoseEstimate().getY())) < 5 || Math.abs((newPoseEstimate.getHeading() - drive.getPoseEstimate().getHeading())) < Math.toRadians(10)) {
+            drive.setPoseEstimate(newPoseEstimate);
+        }
     }
 }
