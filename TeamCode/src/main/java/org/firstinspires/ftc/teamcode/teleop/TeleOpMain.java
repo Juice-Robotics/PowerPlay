@@ -2,14 +2,13 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.lib.AllianceColor;
 
 @TeleOp(group = "competition")
 public class TeleOpMain extends LinearOpMode {
@@ -17,6 +16,7 @@ public class TeleOpMain extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize your own robot class
         Robot robot = new Robot(hardwareMap,false);
+        PhotonCore.enable();
 
         double x;
         double y;

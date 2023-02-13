@@ -2,14 +2,16 @@ package org.firstinspires.ftc.teamcode.subsystems.relocalization;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.outoftheboxrobotics.photoncore.Neutrino.MB1242.MB1242Ex;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Relocalization {
-    private MB1242 frontLeftSensor;
-    private MB1242 frontRightSensor;
-    private MB1242 leftSensor;
-    private MB1242 rightSensor;
+    private MB1242Ex frontLeftSensor;
+    private MB1242Ex frontRightSensor;
+    private MB1242Ex leftSensor;
+    private MB1242Ex rightSensor;
     private boolean reversed;
 
     public Pose2d poseEstimate;
@@ -17,10 +19,17 @@ public class Relocalization {
     public double y;
     public double heading;
 
+    public double a = 0.8;
+
     private double frontLeftRaw;
     private double frontRightRaw;
     private double leftRaw;
     private double rightRaw;
+
+    private double previousFrontLeft;
+    private double previousFrontRight;
+    private double previousLeft;
+    private double previousRight;
 
     private DistanceUnit unit = DistanceUnit.CM;
 
@@ -40,24 +49,24 @@ public class Relocalization {
         RIGHT
     }
 
-    public Relocalization(HardwareMap hardwareMap, Pose2d initialPose, boolean reversed) {
-        frontLeftSensor = new MB1242(hardwareMap, "frontLeftDistanceSensor");
-        frontRightSensor = new MB1242(hardwareMap, "frontRightDistanceSensor");
-        leftSensor = new MB1242(hardwareMap, "leftDistanceSensor");
-        rightSensor = new MB1242(hardwareMap, "rightDistanceSensor");
-        this.reversed = reversed;
-
-        poseEstimate = initialPose;
-        x = initialPose.getX();
-        y = initialPose.getY();
-        heading = initialPose.getHeading();
-    }
+//    public Relocalization(HardwareMap hardwareMap, Pose2d initialPose, boolean reversed) {
+//        frontLeftSensor = new MB1242Ex((I2cDeviceSynch) hardwareMap.get("frontRightDistanceSensor"));
+//        frontRightSensor = new MB1242Ex((I2cDeviceSynch) hardwareMap.i2cDevice.get("frontRightDistanceSensor"));
+//        leftSensor = new MB1242Ex((I2cDeviceSynch) hardwareMap.i2cDevice.get("leftDistanceSensor"));
+//        rightSensor = new MB1242Ex((I2cDeviceSynch) hardwareMap.i2cDevice.get("rightDistanceSensor"));
+//        this.reversed = reversed;
+//
+//        poseEstimate = initialPose;
+//        x = initialPose.getX();
+//        y = initialPose.getY();
+//        heading = initialPose.getHeading();
+//    }
 
     public Relocalization(HardwareMap hardwareMap, boolean reversed) {
-        frontLeftSensor = new MB1242(hardwareMap, "flDistanceSensor");
-        frontRightSensor = new MB1242(hardwareMap, "frDistanceSensor");
-        leftSensor = new MB1242(hardwareMap, "lSensor");
-        rightSensor = new MB1242(hardwareMap, "rDistanceSensor");
+        frontLeftSensor = hardwareMap.get(MB1242Ex.class, "frontLeftDistanceSensor");
+        frontRightSensor = hardwareMap.get(MB1242Ex.class, "frontRightDistanceSensor");
+        leftSensor = hardwareMap.get(MB1242Ex.class, "leftDistanceSensor");
+        rightSensor = hardwareMap.get(MB1242Ex.class, "rightDistanceSensor");
         this.reversed = reversed;
 
         poseEstimate = new Pose2d(0, 0, 0);
@@ -71,20 +80,32 @@ public class Relocalization {
 
         // GET SENSOR VALUES
         // get 3 bursts of detections so the low-pass will be as accurate as possible
-        frontLeftRaw = frontLeftSensor.getDistance(unit);
-        frontRightRaw = frontRightSensor.getDistance(unit);
-        leftRaw = leftSensor.getDistance(unit);
-        rightRaw = rightSensor.getDistance(unit);
+        frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
+        frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
+        leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousLeft);
+        rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousRight);
+        previousFrontLeft = frontLeftRaw;
+        previousFrontRight = frontRightRaw;
+        previousLeft = leftRaw;
+        previousRight = rightRaw;
 
-        frontLeftRaw = frontLeftSensor.getDistance(unit);
-        frontRightRaw = frontRightSensor.getDistance(unit);
-        leftRaw = leftSensor.getDistance(unit);
-        rightRaw = rightSensor.getDistance(unit);
+        frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
+        frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
+        leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousLeft);
+        rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousRight);
+        previousFrontLeft = frontLeftRaw;
+        previousFrontRight = frontRightRaw;
+        previousLeft = leftRaw;
+        previousRight = rightRaw;
 
-        frontLeftRaw = frontLeftSensor.getDistance(unit);
-        frontRightRaw = frontRightSensor.getDistance(unit);
-        leftRaw = leftSensor.getDistance(unit);
-        rightRaw = rightSensor.getDistance(unit);
+        frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
+        frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
+        leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousLeft);
+        rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousRight);
+        previousFrontLeft = frontLeftRaw;
+        previousFrontRight = frontRightRaw;
+        previousLeft = leftRaw;
+        previousRight = rightRaw;
 
         // CALCULATE HEADING
         if (frontLeftRaw == frontRightRaw) {
@@ -96,7 +117,7 @@ public class Relocalization {
 
             heading = Math.toRadians(90 - angleToWall);
         } else if (frontLeftRaw > frontRightRaw) {
-            // TILTED RIGHT
+            // TILTED LEFT
             angleToWall = Math.atan((frontLeftRaw - frontRightRaw) / DISTANCE_BETWEEN_FRONT);
 
             heading = Math.toRadians(270 + angleToWall);
@@ -104,13 +125,13 @@ public class Relocalization {
 
         // CALCULATE X
         if (frontLeftRaw == frontRightRaw) {
-            x = STARTER_STACK_WALL_X - ((frontRightRaw + frontLeftRaw) / 2);
+            x = STARTER_STACK_WALL_X - toInch(((frontRightRaw + frontLeftRaw) / 2));
         } else {
-            x = STARTER_STACK_WALL_X - (Math.sin(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_CENTER_OFFSET));
+            x = STARTER_STACK_WALL_X - toInch((Math.sin(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_CENTER_OFFSET)));
         }
 
         // CALCULATE Y
-        y = ADJACENT_WALL_Y - Math.cos(90 -angleToWall) * (frontLeftRaw + LEFT_TO_CENTER_OFFSET);
+        y = ADJACENT_WALL_Y - toInch(Math.cos(90 - angleToWall) * (frontLeftRaw + LEFT_TO_CENTER_OFFSET));
 
         // CLEANUP
         if (reversed) {
@@ -151,5 +172,13 @@ public class Relocalization {
                 return rightRaw;
         }
         return -1;
+    }
+
+    private double lowPassFilter(double measurement, double previousEstimate) {
+        return (a * previousEstimate) + (1 - a) * measurement;
+    }
+
+    private double toInch(double mm) {
+        return mm / 25.4;
     }
 }
