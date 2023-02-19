@@ -6,8 +6,6 @@ import org.firstinspires.ftc.teamcode.lib.*;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 // IMPORT SUBSYSTEMS
 import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
@@ -197,7 +195,7 @@ public class Robot {
     public void autoLow(boolean pad_down) {
         try {
             Thread.sleep(100);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         this.v4b.runToPreset(Levels.GROUND);
         this.claw.setYRotation(2);
     }
