@@ -73,5 +73,7 @@ public class SlidesManualCurrent extends OpMode {
         telemetry.addData("average current draw 1", averageCD1);
         telemetry.addData("average current draw 2", averageCD2);
         telemetry.update();
+
+        previousPower = power;
     }
 }
