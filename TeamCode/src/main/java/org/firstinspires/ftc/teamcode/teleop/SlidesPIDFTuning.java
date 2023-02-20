@@ -38,6 +38,13 @@ public class SlidesPIDFTuning extends OpMode {
     private DcMotorEx slides1;
     private DcMotorEx slides2;
 
+    private double duration = 0;
+    private boolean targetReached = false;
+    private double totalCD1 = 0;
+    private double averageCD1 = 0;
+    private double totalCD2 = 0;
+    private double averageCD2 = 0;
+
     @Override
     public void init() {
         controller1 = new PIDController(p, i , d);
@@ -65,7 +72,18 @@ public class SlidesPIDFTuning extends OpMode {
 
         if (target != previousTarget) {
             profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(slides1Pos, 0), new MotionState(target, 0), maxvel, maxaccel);
+            duration = 0;
+            targetReached = false;
+            totalCD1 = 0;
+            averageCD1 = 0;
+            totalCD2 = 0;
+            averageCD2 = 0;
             timer.reset();
+        }
+
+        if (slides1Pos == target && !targetReached) {
+            duration = timer.time();
+            targetReached = true;
         }
 
         MotionState state = profile.get(timer.time());
@@ -80,11 +98,20 @@ public class SlidesPIDFTuning extends OpMode {
         slides1.setPower(power1);
         slides2.setPower(power2);
 
+        totalCD1 += slides1.getCurrent(CurrentUnit.AMPS);
+        averageCD1 = totalCD1 / timer.time();
+
+        totalCD2 += slides2.getCurrent(CurrentUnit.AMPS);
+        averageCD2 = totalCD2 / timer.time();
+
         telemetry.addData("pos1 ", slides1Pos);
         telemetry.addData("pos2 ", -slides1Pos);
         telemetry.addData("target ", target);
         telemetry.addData("motor 1 current", slides1.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("motor 2 current", slides2.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("duration to target ", duration);
+        telemetry.addData("average current draw 1", averageCD1);
+        telemetry.addData("average current draw 2", averageCD2);
         telemetry.update();
     }
 }
