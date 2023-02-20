@@ -23,7 +23,7 @@ public class Claw {
     public float clawYReset = 0;
     public double clawYStep = 0.1;
 
-    public Claw(StepperServo claw, StepperServo clawX1, StepperServo clawX2, StepperServo clawY, ColorSensor sensor) {
+    public Claw(StepperServo claw, StepperServo clawY, ColorSensor sensor) {
         this.claw = claw;
         this.clawY = clawY;
         this.clawY.servo.setDirection(Servo.Direction.REVERSE);

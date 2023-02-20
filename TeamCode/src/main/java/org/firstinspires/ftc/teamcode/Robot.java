@@ -68,9 +68,6 @@ public class Robot {
                 new StepperServo(0, "v4bServo1", map),        //6
                 new StepperServo(1, "v4bServo2", map),        //7
 
-                new StepperServo(0, "clawXServo1", map),      //8
-                new StepperServo(1, "clawXServo2", map),      //9
-
                 new StepperServo(0, "clawYServo", map),       //10
 
                 new StepperServo(1, "clawServo", map),        //11
@@ -81,7 +78,7 @@ public class Robot {
         VoltageSensor voltageSensor = map.voltageSensor.iterator().next();
 
         // INIT SUBSYSTEMS
-        this.claw = new Claw((StepperServo) components[11], (StepperServo) components[8], (StepperServo) components[9], (StepperServo) components[10], map.colorSensor.get("colorSensor"));
+        this.claw = new Claw((StepperServo) components[11], (StepperServo) components[10], map.colorSensor.get("colorSensor"));
         this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
         this.retractodo = new retractOdo((StepperServo) components[12]);

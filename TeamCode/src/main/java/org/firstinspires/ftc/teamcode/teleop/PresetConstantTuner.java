@@ -51,7 +51,7 @@ public class PresetConstantTuner extends OpMode {
         VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         // INIT SUBSYSTEMS
-        claw = new Claw((StepperServo) components[5], (StepperServo) components[2], (StepperServo) components[3], (StepperServo) components[4], hardwareMap.get(ColorSensor.class, "clawSensor"));
+        claw = new Claw((StepperServo) components[5], (StepperServo) components[4], hardwareMap.get(ColorSensor.class, "clawSensor"));
         v4b = new V4B((StepperServo) components[0], (StepperServo) components[1]);
         slides = new Slides((Motor) components[6], (Motor) components[7], voltageSensor);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
