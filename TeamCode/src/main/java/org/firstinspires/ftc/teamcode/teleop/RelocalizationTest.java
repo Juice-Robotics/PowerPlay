@@ -22,11 +22,11 @@ public class RelocalizationTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Relocalization relocalizer = new Relocalization(hardwareMap, false);
         Pose2d poseEstimate;
         timer = new ElapsedTime();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Relocalization relocalizer = new Relocalization(hardwareMap, drive.gyro,false);
 
         waitForStart();
 

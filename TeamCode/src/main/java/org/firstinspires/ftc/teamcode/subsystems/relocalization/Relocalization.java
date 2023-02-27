@@ -12,6 +12,7 @@ public class Relocalization {
     private MB1242Ex frontRightSensor;
     private MB1242Ex leftSensor;
     private MB1242Ex rightSensor;
+    private SanfordGyro gyro;
     private final boolean reversed;
 
     public Pose2d poseEstimate;
@@ -63,11 +64,12 @@ public class Relocalization {
 //        heading = initialPose.getHeading();
 //    }
 
-    public Relocalization(HardwareMap hardwareMap, boolean reversed) {
+    public Relocalization(HardwareMap hardwareMap,SanfordGyro gyro, boolean reversed) {
         frontLeftSensor = hardwareMap.get(MB1242Ex.class, "frontLeftDistanceSensor");
         frontRightSensor = hardwareMap.get(MB1242Ex.class, "frontRightDistanceSensor");
         leftSensor = hardwareMap.get(MB1242Ex.class, "leftDistanceSensor");
         rightSensor = hardwareMap.get(MB1242Ex.class, "rightDistanceSensor");
+        this.gyro = gyro;
         this.reversed = reversed;
 
         poseEstimate = new Pose2d(0, 0, 0);
@@ -103,20 +105,22 @@ public class Relocalization {
         previousSide = sideRaw;
 
         // CALCULATE HEADING
-        if (frontLeftRaw == frontRightRaw) {
-            // PARALLEL TO WALL
-            heading = 0;
-        } else if (frontLeftRaw < frontRightRaw) {
-            // TILTED RIGHT
-            angleToWall = Math.atan((frontRightRaw - frontLeftRaw) / DISTANCE_BETWEEN_FRONT);
+//        if (frontLeftRaw == frontRightRaw) {
+//            // PARALLEL TO WALL
+//            heading = 0;
+//        } else if (frontLeftRaw < frontRightRaw) {
+//            // TILTED RIGHT
+//            angleToWall = Math.atan((frontRightRaw - frontLeftRaw) / DISTANCE_BETWEEN_FRONT);
+//
+//            heading = Math.toRadians(90 - angleToWall);
+//        } else {
+//            // TILTED LEFT
+//            angleToWall = Math.atan((frontLeftRaw - frontRightRaw) / DISTANCE_BETWEEN_FRONT);
+//
+//            heading = Math.toRadians(270 + angleToWall);
+//        }
+        heading = gyro.getAngle();
 
-            heading = Math.toRadians(90 - angleToWall);
-        } else {
-            // TILTED LEFT
-            angleToWall = Math.atan((frontLeftRaw - frontRightRaw) / DISTANCE_BETWEEN_FRONT);
-
-            heading = Math.toRadians(270 + angleToWall);
-        }
 
         // CALCULATE X
         if (frontLeftRaw == frontRightRaw) {

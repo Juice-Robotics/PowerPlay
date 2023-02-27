@@ -82,7 +82,7 @@ public class Robot {
         this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
         this.retractodo = new retractOdo((StepperServo) components[12]);
-        this.relocalizer = new Relocalization(map, false);
+        this.relocalizer = new Relocalization(map, drive.gyro, false);
     }
 
 
