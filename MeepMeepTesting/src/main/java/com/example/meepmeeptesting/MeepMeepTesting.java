@@ -19,7 +19,7 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(-360), 15)
                 .followTrajectorySequence(drive ->
                                         drive.trajectorySequenceBuilder(new Pose2d(35, 63, Math.toRadians(90)))
-                                                .back(50)
+                                                .back(30)
                                                 .addDisplacementMarker(1, ()-> {
 //                                    robot.autoHigh(true);
 //                                    robot.guide.setGuideDown();
@@ -28,7 +28,7 @@ public class MeepMeepTesting {
                                                 .addDisplacementMarker(32, ()-> {
 //                                    robot.slides.runToPreset(Levels.HIGH);
                                                 })
-                                                .splineTo(new Vector2d(30.5,7), 179.8)
+                                                .splineTo(new Vector2d(33,20), Math.toRadians(165))
                                                 .addDisplacementMarker(54,()->{
 //                                    robot.slides.runToPosition(-330);
                                                 })
@@ -50,7 +50,7 @@ public class MeepMeepTesting {
                                                 })
 
                                                 .setReversed(true)
-                                                .splineTo(new Vector2d(5,21), Math.toRadians(135))
+                                                .splineTo(new Vector2d(26,20), Math.toRadians(135))
                                                 .addTemporalMarker(1, ()->{
 //                    robot.autoHigh(true);
                                                 })
@@ -77,7 +77,7 @@ public class MeepMeepTesting {
                                                 })
 
                                                 .setReversed(true)
-                                                .splineTo(new Vector2d(5,21), Math.toRadians(135))
+                                                .splineTo(new Vector2d(26,20), Math.toRadians(135))
                                                 .addTemporalMarker(1, ()->{
 //                    robot.autoHigh(true);
                                                 })
@@ -104,7 +104,7 @@ public class MeepMeepTesting {
                                                 })
 
                                                 .setReversed(true)
-                                                .splineTo(new Vector2d(5,21), Math.toRadians(135))
+                                                .splineTo(new Vector2d(26,20), Math.toRadians(135))
                                                 .addTemporalMarker(1, ()->{
 //                    robot.autoHigh(true);
                                                 })
@@ -131,7 +131,7 @@ public class MeepMeepTesting {
                                                 })
 
                                                 .setReversed(true)
-                                                .splineTo(new Vector2d(5,21), Math.toRadians(135))
+                                                .splineTo(new Vector2d(26,20), Math.toRadians(135))
                                                 .addTemporalMarker(1, ()->{
 //                    robot.autoHigh(true);
                                                 })
@@ -160,7 +160,7 @@ public class MeepMeepTesting {
 
 
                                                 .setReversed(true)
-                                                .splineTo(new Vector2d(5,21), Math.toRadians(135))
+                                                .splineTo(new Vector2d(26,20), Math.toRadians(135))
                                                 .addTemporalMarker(1, ()->{
 //                    robot.autoHigh(true);
                                                 })

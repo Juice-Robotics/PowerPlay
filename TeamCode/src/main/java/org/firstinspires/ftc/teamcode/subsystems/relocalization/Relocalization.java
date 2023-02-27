@@ -177,10 +177,10 @@ public class Relocalization {
 
     private double getSideMeasurement() {
         if (reversed) {
-            rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousSide);
+            leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousSide);
             return rightRaw;
         } else {
-            leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousSide);
+            rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousSide);
             return leftRaw;
         }
     }
