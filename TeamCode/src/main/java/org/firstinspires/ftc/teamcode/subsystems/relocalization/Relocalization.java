@@ -20,7 +20,7 @@ public class Relocalization {
     public double y;
     public double heading;
 
-    public double a = 0.8;
+    public double a = 0.99;
 
     private double frontLeftRaw;
     private double frontRightRaw;
@@ -32,16 +32,19 @@ public class Relocalization {
     private double previousFrontRight;
     private double previousSide;
 
-    private DistanceUnit unit = DistanceUnit.CM;
+    private final DistanceUnit unit = DistanceUnit.MM;
 
     // CONSTANTS
-    private double DISTANCE_BETWEEN_FRONT = 325.848;
-    private double FRONT_TO_ORIGIN_OFFSET = 0;
-    private double OFFSET_SIDE_X = 0;
-    private double OFFSET_SIDE_Y = 0;
+    private final double DISTANCE_BETWEEN_FRONT = 325.848;
+    private final double FRONT_TO_ORIGIN_OFFSET = 0;
+    private final double OFFSET_SIDE_X = 194.175;
+    private final double OFFSET_SIDE_Y = 62.621175;
 
-    private double STARTER_STACK_WALL_X = 72;
-    private double ADJACENT_WALL_Y = 72;
+    private final double STARTER_STACK_WALL_X = 72;
+    private final double ADJACENT_WALL_Y = 72;
+
+    private final double X_MANUAL_OFFSET = 0;
+    private final double Y_MANUAL_OFFSET = 0;
 
     public enum DistanceSensor {
         FRONT_LEFT,
@@ -120,17 +123,18 @@ public class Relocalization {
 //            heading = Math.toRadians(270 + angleToWall);
 //        }
         heading = gyro.getAngle();
+        angleToWall = Math.toDegrees(heading);
 
-
-        // CALCULATE X
-        if (frontLeftRaw == frontRightRaw) {
-            x = STARTER_STACK_WALL_X - toInch(((frontRightRaw + frontLeftRaw) / 2));
-        } else {
-            x = STARTER_STACK_WALL_X - toInch((Math.cos(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_ORIGIN_OFFSET)));
-        }
 
         // CALCULATE Y
-        y = ADJACENT_WALL_Y - toInch(Math.hypot((sideRaw + OFFSET_SIDE_X), (OFFSET_SIDE_Y)) * Math.cos(90 - Math.atan(heading / (sideRaw + OFFSET_SIDE_X)) - heading));
+        if (frontLeftRaw == frontRightRaw) {
+            y = STARTER_STACK_WALL_X + toInch(((frontRightRaw + frontLeftRaw) / 2)) + Y_MANUAL_OFFSET;
+        } else {
+            y = STARTER_STACK_WALL_X + toInch((Math.cos(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_ORIGIN_OFFSET))) + Y_MANUAL_OFFSET;
+        }
+
+        // CALCULATE X
+        x = ADJACENT_WALL_Y + toInch(Math.hypot((sideRaw + OFFSET_SIDE_X), (OFFSET_SIDE_Y)) * Math.cos(90 - Math.atan(heading / (sideRaw + OFFSET_SIDE_X)) - heading)) + X_MANUAL_OFFSET;
 
         // CLEANUP
         if (reversed) {
@@ -181,11 +185,11 @@ public class Relocalization {
 
     private double getSideMeasurement() {
         if (reversed) {
-            leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousSide);
+            rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousSide);
             return rightRaw;
         } else {
-            rightRaw = lowPassFilter(rightSensor.getDistance(unit), previousSide);
-            return leftRaw;
+            leftRaw = lowPassFilter(leftSensor.getDistance(unit), previousSide);
+            return rightRaw;
         }
     }
 

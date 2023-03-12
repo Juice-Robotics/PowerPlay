@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 @TeleOp
 public class RelocalizationTest extends LinearOpMode {
     public static int REFRESH_RATE_MS = 500;
+    public static double a = 0.99;
     private ElapsedTime timer;
 
     @Override
@@ -30,7 +31,8 @@ public class RelocalizationTest extends LinearOpMode {
 
         waitForStart();
 
-        while (!isStopRequested()) {
+        while (opModeIsActive() && !isStopRequested()) {
+            relocalizer.a = a;
             if (timer.time(TimeUnit.MILLISECONDS) >= REFRESH_RATE_MS) {
                 poseEstimate = relocalizer.relocalize();
                 drive.setPoseEstimate(poseEstimate);
@@ -38,10 +40,10 @@ public class RelocalizationTest extends LinearOpMode {
                 telemetry.addData("x", poseEstimate.getX());
                 telemetry.addData("y", poseEstimate.getY());
                 telemetry.addData("heading", poseEstimate.getHeading());
-//                telemetry.addData("sensorFrontLeft", relocalizer.getDistance(Relocalization.DistanceSensor.FRONT_LEFT));
-//                telemetry.addData("sensorFrontRight", relocalizer.getDistance(Relocalization.DistanceSensor.FRONT_RIGHT));
-//                telemetry.addData("sensorLeft", relocalizer.getDistance(Relocalization.DistanceSensor.LEFT));
-//                telemetry.addData("sensorRight", relocalizer.getDistance(Relocalization.DistanceSensor.RIGHT));
+                telemetry.addData("sensorFrontLeft", relocalizer.getCachedDistance(Relocalization.DistanceSensor.FRONT_LEFT));
+                telemetry.addData("sensorFrontRight", relocalizer.getCachedDistance(Relocalization.DistanceSensor.FRONT_RIGHT));
+                telemetry.addData("sensorLeft", relocalizer.getCachedDistance(Relocalization.DistanceSensor.LEFT));
+                telemetry.addData("sensorRight", relocalizer.getCachedDistance(Relocalization.DistanceSensor.RIGHT));
                 telemetry.update();
 
                 timer.reset();

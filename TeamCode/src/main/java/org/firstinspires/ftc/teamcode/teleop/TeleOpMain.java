@@ -13,14 +13,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDriveCancelable;
+import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @TeleOp(group = "competition")
 public class TeleOpMain extends LinearOpMode {
 
     enum MODE {
-        DRIVER,
-        AUTON
+        MANUAL,
+        PIDF
     }
 
     @Override
@@ -28,7 +29,7 @@ public class TeleOpMain extends LinearOpMode {
         // Initialize your own robot class
         Robot robot = new Robot(hardwareMap,false);
         SampleMecanumDriveCancelable autonDrive = new SampleMecanumDriveCancelable(hardwareMap);
-        MODE mode = MODE.DRIVER;
+        MODE slidesMode = MODE.PIDF;
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
@@ -74,8 +75,7 @@ public class TeleOpMain extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
 
-            switch (mode) {
-                case DRIVER:
+
                     if (gamepad1.dpad_up) {
                         robot.slides.resetAllEncoders();
                     }
@@ -105,33 +105,32 @@ public class TeleOpMain extends LinearOpMode {
                     if (gamepad1.dpad_down)
                         robot.sidewaysPickup(gamepad1.dpad_down);
 
-                    if (gamepad1.triangle) {
-                        gamepad1.rumble(200);
-                        autonDrive.followTrajectorySequenceAsync(autonCycle);
-                        mode = MODE.AUTON;
-                    }
-
                     //CLAW
                     if (gamepad1.circle && !autoClosePreviousState) {
                         autoCloseEnabled = !autoCloseEnabled;
                     }
 
                     if (gamepad2.left_trigger > 0.1) {
-                        robot.slides.runToPosition((int) (robot.slides.slides1.motor.getCurrentPosition() + (0.1 * gamepad2.left_trigger)));
+                        slidesMode = MODE.MANUAL;
+                        robot.slides.slides1.motor.setPower(gamepad2.left_trigger * 0.75);
+                        robot.slides.slides2.motor.setPower(gamepad2.left_trigger * 0.75);
                     } else if (gamepad2.right_trigger > 0.1) {
-                        robot.slides.runToPosition((int) (robot.slides.slides1.motor.getCurrentPosition() - (10 * gamepad2.left_trigger)));
+                        slidesMode = MODE.MANUAL;
+                        robot.slides.slides1.motor.setPower(gamepad2.left_trigger * 0.75);
+                        robot.slides.slides2.motor.setPower(gamepad2.left_trigger * 0.75);
+                    } else if (slidesMode == MODE.MANUAL) {
+                        slidesMode = MODE.PIDF;
+                        robot.slides.runToPosition(robot.slides.slides1.motor.getCurrentPosition());
                     }
 
                     if (gamepad2.left_bumper) {
-                        robot.v4b.setAngle(robot.v4b.currentAngle - 1);
+                        robot.slides.runToPosition((int) (robot.slides.slides1.motor.getCurrentPosition() + 60));
                     } else if (gamepad2.right_bumper) {
-                        robot.v4b.setAngle(robot.v4b.currentAngle + 1);
+                        robot.slides.runToPosition((int) (robot.slides.slides1.motor.getCurrentPosition() - 60));
                     }
 
-                    if (gamepad2.dpad_up) {
-    //                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() + 1));
-                    } else if (gamepad2.dpad_down) {
-    //                robot.claw.setXRotation((float) (robot.claw.clawX1.getAngle() - 1));
+                    if (gamepad2.x) {
+                      robot.slides.runToPreset(Levels.AUTOINIT);
                     }
 
                     if (gamepad2.dpad_right) {
@@ -173,33 +172,11 @@ public class TeleOpMain extends LinearOpMode {
 
                     previousClawSensorState = robot.claw.sensor.conePresent();
                     autoClosePreviousState = gamepad1.circle;
-                    break;
-                case AUTON:
-                    // Update the drive class
-                    autonDrive.update();
 
-                    // Read pose
-                    Pose2d poseEstimate = autonDrive.getPoseEstimate();
 
-                    // If x is pressed, we break out of the automatic following
-                    if (gamepad1.x) {
-                        autonDrive.breakFollowing();
-                        mode = MODE.DRIVER;
-                    }
 
-                    // If drive finishes its task, repeat cycle
-                    if (!autonDrive.isBusy()) {
-                        autonDrive.followTrajectorySequenceAsync(autonCycle);
-                    }
 
-                    if (gamepad1.left_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.right_stick_x != 0 || gamepad1.right_stick_y != 0) {
-                        gamepad1.rumble(100);
-                    }
-
-                    break;
-            }
-
-            robot.slides.update();
+            if (slidesMode == MODE.PIDF) robot.slides.update();
             telemetry.addData("claw sensor: ", robot.claw.sensor.getRange());
             telemetry.addData("v4b position target: ", robot.v4b.getAngle());
             telemetry.addData("v4b1 position: ", (robot.v4b.v4b1.servo.getPosition()*180));
