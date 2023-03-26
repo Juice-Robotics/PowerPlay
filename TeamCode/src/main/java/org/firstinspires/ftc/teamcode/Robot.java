@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.retractOdo.retractOdo;
 import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.v4b.V4B;
+import org.firstinspires.ftc.teamcode.subsystems.vision.AutoAlign;
 
 
 public class Robot {
@@ -22,6 +23,7 @@ public class Robot {
     public Slides slides;
     public V4B v4b;
     public retractOdo retractodo;
+    public AutoAlign autoAlign;
 
     // STATE VARS
     // example: clawToggled = false;
@@ -79,6 +81,7 @@ public class Robot {
         this.slides = new Slides((Motor) components[4], (Motor) components[5], voltageSensor);
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
         this.retractodo = new retractOdo((StepperServo) components[10]);
+        this.autoAlign = new AutoAlign(drive);
     }
 
 

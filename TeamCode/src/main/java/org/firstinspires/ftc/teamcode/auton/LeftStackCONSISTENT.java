@@ -270,6 +270,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        robot.autoAlign.setCamera(camera);
 
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -367,6 +368,7 @@ public class LeftStackCONSISTENT extends LinearOpMode {
         }
 
         waitForStart();
+        robot.autoAlign.observeStick();
 
         if (isStopRequested()) return;
 

@@ -6,21 +6,32 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 public class AutoAlign {
-    private OpenCvWebcam webcam;
+    private OpenCvCamera webcam;
     private SampleMecanumDrive drive;
     private StickObserverPipeline stickObserverPipeline = null;
     Pose2d polePos = new Pose2d(0,0,0);
 
-    public AutoAlign(OpenCvWebcam camera, SampleMecanumDrive drive) {
+    public AutoAlign(OpenCvCamera camera, SampleMecanumDrive drive) {
         webcam = camera;
         this.drive = drive;
+    }
+
+    public AutoAlign(SampleMecanumDrive drive) {
+        this.drive = drive;
+    }
+
+    public void setCamera(OpenCvCamera camera) {
+        this.webcam = camera;
     }
 
     public void observeStick(){
@@ -72,7 +83,7 @@ public class AutoAlign {
         Pose2d pos = drive.getPoseEstimate();
         pos = new Pose2d(pos.getX(),pos.getY(),pos.getHeading()+coords[0]*PI/180+PI);
         polePos = new Pose2d(pos.getX()+cos(pos.getHeading())*coords[1]+sin(pos.getHeading()),pos.getY()+sin(pos.getHeading())*coords[1]+cos(pos.getHeading()),pos.getHeading());
-        if(abs(coords[1])<5&&abs(coords[1])>0){
+        if (abs(coords[1])<5&&abs(coords[1])>0){
 //            setDoneLookin(true);
         }
 //        if(abs(pos.vec().distTo(roadrun.getCurrentTraj().end().vec()))<2){
@@ -101,14 +112,29 @@ public class AutoAlign {
         return polePos;
     }
 
-    public void updateTrajectory() {
+    public void updateTrajectory(Robot robot) {
         if (lookingAtPole()) {
             Pose2d target = polePos();
             TrajectorySequence trajectory = drive.getCurrentTraj();
             drive.changeTrajectorySequence(drive.trajectorySequenceBuilder(trajectory.start())
+//                    .setReversed(true)
+////                                .splineTo(target.vec(), target.getHeading())
+//                    .splineTo(target.vec(), trajectory.end().getHeading()+PI)
                     .setReversed(true)
-//                                .splineTo(target.vec(), target.getHeading())
-                    .splineTo(target.vec(), trajectory.end().getHeading()+PI)
+                    .splineTo(target.vec(), Math.toRadians(226))
+                    .addTemporalMarker(1, ()->{
+                        robot.highPreset(true);
+                    })
+                    .addTemporalMarker(1.7, ()->{
+                        robot.v4b.runToPreset(Levels.AUTODEPOSIT);
+                    })
+                    .addTemporalMarker(1.7, ()->{
+                        robot.autoDeposit(true);
+                    })
+                    .addTemporalMarker(1.9, ()->{
+                        robot.slides.runToPosition(-220);
+                    })
+                    .waitSeconds(0.6)
                     .build());
         }
     }
