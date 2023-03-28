@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.lib.Field;
 import org.firstinspires.ftc.teamcode.lib.Levels;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -76,25 +77,25 @@ public class AutoAlign {
         });
     }
 
-    public boolean lookingAtPole() {
-        double[] coords = rotatedPolarCoord();
-//        coords[1]+=5;
-        coords[1] -=1;
-        Pose2d pos = drive.getPoseEstimate();
-        pos = new Pose2d(pos.getX(),pos.getY(),pos.getHeading()+coords[0]*PI/180+PI);
-        polePos = new Pose2d(pos.getX()+cos(pos.getHeading())*coords[1]+sin(pos.getHeading()),pos.getY()+sin(pos.getHeading())*coords[1]+cos(pos.getHeading()),pos.getHeading());
-        if (abs(coords[1])<5&&abs(coords[1])>0){
-//            setDoneLookin(true);
-        }
-//        if(abs(pos.vec().distTo(roadrun.getCurrentTraj().end().vec()))<2){
-//            setDoneLookin(true);
+//    public boolean lookingAtPole() {
+//        double[] coords = rotatedPolarCoord();
+////        coords[1]+=5;
+//        coords[1] -=1;
+//        Pose2d pos = drive.getPoseEstimate();
+//        pos = new Pose2d(pos.getX(),pos.getY(),pos.getHeading()+coords[0]*PI/180+PI);
+//        polePos = new Pose2d(pos.getX()+cos(pos.getHeading())*coords[1]+sin(pos.getHeading()),pos.getY()+sin(pos.getHeading())*coords[1]+cos(pos.getHeading()),pos.getHeading());
+//        if (abs(coords[1])<5&&abs(coords[1])>0){
+//            field.setDoneLookin(true);
 //        }
-
-        if(abs(pos.vec().distTo(drive.getCurrentTraj().end().vec()))<10&&abs(coords[1])<18&&coords[1]>3&&(drive.getCurrentTraj()==null||abs(polePos.vec().distTo(drive.getCurrentTraj().end().vec()))<2.8)){
-            return true;
-        }
-        return false;
-    }
+//        if(abs(pos.vec().distTo(drive.getCurrentTraj().end().vec()))<2){
+//            field.setDoneLookin(true);
+//        }
+//
+//        if(abs(pos.vec().distTo(drive.getCurrentTraj().end().vec()))<10&&abs(coords[1])<18&&coords[1]>3&&(drive.getCurrentTraj()==null||abs(polePos.vec().distTo(drive.getCurrentTraj().end().vec()))<2.8)){
+//            return true;
+//        }
+//        return false;
+//    }
 
     public double centerOfPole(){
         return stickObserverPipeline.centerOfPole();
@@ -112,30 +113,4 @@ public class AutoAlign {
         return polePos;
     }
 
-    public void updateTrajectory(Robot robot) {
-        if (lookingAtPole()) {
-            Pose2d target = polePos();
-            TrajectorySequence trajectory = drive.getCurrentTraj();
-            drive.changeTrajectorySequence(drive.trajectorySequenceBuilder(trajectory.start())
-//                    .setReversed(true)
-////                                .splineTo(target.vec(), target.getHeading())
-//                    .splineTo(target.vec(), trajectory.end().getHeading()+PI)
-                    .setReversed(true)
-                    .splineTo(target.vec(), Math.toRadians(226))
-                    .addTemporalMarker(1, ()->{
-                        robot.highPreset(true);
-                    })
-                    .addTemporalMarker(1.7, ()->{
-                        robot.v4b.runToPreset(Levels.AUTODEPOSIT);
-                    })
-                    .addTemporalMarker(1.7, ()->{
-                        robot.autoDeposit(true);
-                    })
-                    .addTemporalMarker(1.9, ()->{
-                        robot.slides.runToPosition(-220);
-                    })
-                    .waitSeconds(0.6)
-                    .build());
-        }
-    }
 }

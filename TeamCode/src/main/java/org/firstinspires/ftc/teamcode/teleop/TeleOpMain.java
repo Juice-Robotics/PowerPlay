@@ -35,6 +35,7 @@ public class TeleOpMain extends LinearOpMode {
         PhotonCore.enable();
         autonDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Pose2d startPose = new Pose2d(0, 0, 0);
+        int stackPos = -220;
 
         double x;
         double y;
@@ -104,6 +105,10 @@ public class TeleOpMain extends LinearOpMode {
                         robot.highPreset(gamepad1.left_bumper);
                     if (gamepad1.dpad_down)
                         robot.sidewaysPickup(gamepad1.dpad_down);
+                    if (gamepad1.square) {
+                        robot.slides.runToPosition(stackPos);
+                        stackPos += 80;
+                    }
 
                     //CLAW
                     if (gamepad1.circle && !autoClosePreviousState) {

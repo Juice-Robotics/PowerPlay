@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Math.PI;
+
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.*;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -13,6 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.retractOdo.retractOdo;
 import org.firstinspires.ftc.teamcode.subsystems.slides.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.v4b.V4B;
 import org.firstinspires.ftc.teamcode.subsystems.vision.AutoAlign;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
 public class Robot {
@@ -24,6 +29,7 @@ public class Robot {
     public V4B v4b;
     public retractOdo retractodo;
     public AutoAlign autoAlign;
+    public Field field;
 
     // STATE VARS
     // example: clawToggled = false;
@@ -82,6 +88,7 @@ public class Robot {
         this.v4b = new V4B((StepperServo) components[6], (StepperServo) components[7]);
         this.retractodo = new retractOdo((StepperServo) components[10]);
         this.autoAlign = new AutoAlign(drive);
+        this.field = new Field(drive, autoAlign);
     }
 
 
@@ -257,6 +264,35 @@ public class Robot {
 //        this.claw.setYRotation(0);
 //        this.guide.toggle();
 //    }
+
+    public void updateTrajectoryWithCam() {
+        if (field.isDoneLookin()) {
+            if (field.lookingAtPole()) {
+                Pose2d target = field.polePos();
+                TrajectorySequence trajectory = drive.getCurrentTraj();
+                drive.changeTrajectorySequence(drive.trajectorySequenceBuilder(trajectory.start())
+                        .setReversed(true)
+                        .splineTo(target.vec(), Math.toRadians(226))
+                        .addTemporalMarker(1, ()->{
+                            highPreset(true);
+                        })
+                        .addTemporalMarker(1.7, ()->{
+                            v4b.runToPreset(Levels.AUTODEPOSIT);
+                        })
+                        .addTemporalMarker(1.7, ()->{
+                            autoDeposit(true);
+                        })
+                        .addTemporalMarker(1.9, ()->{
+                            slides.runToPosition(-220);
+                        })
+                        .waitSeconds(0.6)
+                        .build());
+//                field.setDoneLookin(true);
+//                logger.log("/RobotLogs/GeneralRobot", "coords"+cv.rotatedPolarCoord()[0]+","+cv.rotatedPolarCoord()[1]);
+            }
+            field.setDoneLookin(false);
+        }
+    }
 
     public void resetAllServos() {
         this.v4b.setAngle(0);
