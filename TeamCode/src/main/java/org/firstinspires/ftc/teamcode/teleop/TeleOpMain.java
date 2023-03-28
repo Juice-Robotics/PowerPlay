@@ -35,7 +35,7 @@ public class TeleOpMain extends LinearOpMode {
         PhotonCore.enable();
         autonDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Pose2d startPose = new Pose2d(0, 0, 0);
-        int stackPos = -220;
+        boolean stackMode = false;
 
         double x;
         double y;
@@ -106,8 +106,7 @@ public class TeleOpMain extends LinearOpMode {
                     if (gamepad1.dpad_down)
                         robot.sidewaysPickup(gamepad1.dpad_down);
                     if (gamepad1.square) {
-                        robot.slides.runToPosition(stackPos);
-                        stackPos += 80;
+                        stackMode = !stackMode;
                     }
 
                     //CLAW
@@ -145,8 +144,10 @@ public class TeleOpMain extends LinearOpMode {
                     }
 
                     boolean isPressed = gamepad1.cross;
-                    if (isPressed && !previousClawState) {
+                    if (isPressed && !previousClawState && !stackMode) {
                         robot.advancedToggleClaw();
+                    } else if (isPressed && !previousClawState) {
+                        robot.advancedToggleClawStack();
                     }
                     previousClawState = isPressed;
 

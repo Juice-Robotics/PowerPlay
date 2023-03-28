@@ -56,6 +56,8 @@ public class Robot {
         ONE
     }
 
+    int stackPos = -220;
+
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
 
@@ -149,6 +151,55 @@ public class Robot {
         }
     }
 
+    public void advancedToggleClawStack() {
+        if (currentPosition == Levels.GROUND) {
+            this.claw.toggle();
+        } else if (currentPosition == Levels.LOW){
+            this.v4b.runToPreset(Levels.TELEDEPOSIT);
+            this.claw.toggle();
+//            try {
+//                this.slides.launchAsThreadBasic();
+//                Thread.sleep(400);
+//                this.slides.destroyThreadsBasic();
+//            } catch (Exception e) {}
+//            autoLow(true);
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                    } catch (Exception e) {
+                    }
+                    claw.setClawClose();
+                    try {
+                        Thread.sleep(300);
+                    } catch (Exception e) {
+                    }
+                    stacktelePreset(true);
+                }});
+            thread.start();
+
+        }
+        else {
+            this.v4b.runToPreset(Levels.TELEDEPOSIT);
+            this.claw.toggle();
+//            try {
+//                this.slides.launchAsThreadBasic();
+//                Thread.sleep(400);
+//                this.slides.destroyThreadsBasic();
+//            } catch (Exception e) {}
+//            autoLow(true);
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(300);
+                    } catch (Exception e) {
+                    }
+                    stacktelePreset(true);
+                }});
+            thread.start();
+        }
+    }
+
     public void startClawY(boolean direction) {
         this.claw.startYRotation(direction);
     }
@@ -175,6 +226,22 @@ public class Robot {
         } catch (Exception e) {}
         this.claw.setClawOpen();
         currentPosition = Levels.GROUND;
+    }
+
+    public void stacktelePreset(boolean pad_down) {
+        this.slides.runToPosition(stackPos);
+        try {
+            Thread.sleep(300);
+        } catch (Exception e) {}
+        this.claw.setClawClose();
+        this.v4b.runToPreset(Levels.GROUND);
+        this.claw.setYRotation(2);
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {}
+        this.claw.setClawOpen();
+        currentPosition = Levels.GROUND;
+        stackPos += 80;
     }
 
     public void groundPreset(boolean pad_down) {
