@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.outoftheboxrobotics.photoncore.Neutrino.MB1242.MB1242Ex;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.lib.AllianceColor;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public class Relocalization {
     private MB1242Ex frontLeftSensor;
     private MB1242Ex frontRightSensor;
     private MB1242Ex leftSensor;
     private MB1242Ex rightSensor;
-    private SanfordGyro gyro;
+    private SampleMecanumDrive drive;
     private final boolean reversed;
 
     public Pose2d poseEstimate;
@@ -67,12 +67,12 @@ public class Relocalization {
 //        heading = initialPose.getHeading();
 //    }
 
-    public Relocalization(HardwareMap hardwareMap,SanfordGyro gyro, boolean reversed) {
+    public Relocalization(HardwareMap hardwareMap, SampleMecanumDrive drive, boolean reversed) {
         frontLeftSensor = hardwareMap.get(MB1242Ex.class, "frontLeftDistanceSensor");
         frontRightSensor = hardwareMap.get(MB1242Ex.class, "frontRightDistanceSensor");
         leftSensor = hardwareMap.get(MB1242Ex.class, "leftDistanceSensor");
         rightSensor = hardwareMap.get(MB1242Ex.class, "rightDistanceSensor");
-        this.gyro = gyro;
+        this.drive = drive;
         this.reversed = reversed;
 
         poseEstimate = new Pose2d(0, 0, 0);
@@ -86,6 +86,20 @@ public class Relocalization {
 
         // GET SENSOR VALUES
         // get 3 bursts of detections so the low-pass will be as accurate as possible
+        frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
+        frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
+        sideRaw = getSideMeasurement();
+        previousFrontLeft = frontLeftRaw;
+        previousFrontRight = frontRightRaw;
+        previousSide = sideRaw;
+
+        frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
+        frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
+        sideRaw = getSideMeasurement();
+        previousFrontLeft = frontLeftRaw;
+        previousFrontRight = frontRightRaw;
+        previousSide = sideRaw;
+
         frontLeftRaw = lowPassFilter(frontLeftSensor.getDistance(unit), previousFrontLeft);
         frontRightRaw = lowPassFilter(frontRightSensor.getDistance(unit), previousFrontRight);
         sideRaw = getSideMeasurement();
@@ -122,7 +136,7 @@ public class Relocalization {
 //
 //            heading = Math.toRadians(270 + angleToWall);
 //        }
-        heading = gyro.getAngle();
+        heading = drive.getExternalHeading();
         angleToWall = Math.toDegrees(heading);
 
 
@@ -175,6 +189,20 @@ public class Relocalization {
                 return rightRaw;
             case SIDE:
                 return sideRaw;
+        }
+        return -1;
+    }
+
+    public double getDistance(DistanceSensor sensor) {
+        switch (sensor) {
+            case FRONT_LEFT:
+                return frontLeftRaw;
+            case FRONT_RIGHT:
+                return frontRightRaw;
+            case LEFT:
+                return leftRaw;
+            case RIGHT:
+                return rightRaw;
         }
         return -1;
     }

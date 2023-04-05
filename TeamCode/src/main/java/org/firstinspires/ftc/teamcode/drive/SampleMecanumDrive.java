@@ -6,10 +6,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.RFHolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.RFTrajectoryFollower;
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -33,7 +32,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.TrajectorySegment;
-import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;

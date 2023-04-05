@@ -40,7 +40,7 @@ public class TrajectorySequenceRunner {
 
     public static int POSE_HISTORY_LIMIT = 100;
 
-    private final TrajectoryFollower follower;
+    private final RFTrajectoryFollower follower;
 
     private final PIDFController turnController;
 
