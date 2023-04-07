@@ -140,15 +140,15 @@ public class Relocalization {
         angleToWall = Math.toDegrees(heading);
 
 
-        // CALCULATE Y
+        // CALCULATE X
         if (frontLeftRaw == frontRightRaw) {
-            y = STARTER_STACK_WALL_X + toInch(((frontRightRaw + frontLeftRaw) / 2)) + Y_MANUAL_OFFSET;
+            x = STARTER_STACK_WALL_X + toInch(((frontRightRaw + frontLeftRaw) / 2)) + X_MANUAL_OFFSET;
         } else {
-            y = STARTER_STACK_WALL_X + toInch((Math.cos(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_ORIGIN_OFFSET))) + Y_MANUAL_OFFSET;
+            x = STARTER_STACK_WALL_X + toInch((Math.cos(90 - angleToWall) * (((frontLeftRaw + frontRightRaw) / 2) + FRONT_TO_ORIGIN_OFFSET))) + X_MANUAL_OFFSET;
         }
 
-        // CALCULATE X
-        x = ADJACENT_WALL_Y + toInch(Math.hypot((sideRaw + OFFSET_SIDE_X), (OFFSET_SIDE_Y)) * Math.cos(90 - Math.atan(heading / (sideRaw + OFFSET_SIDE_X)) - heading)) + X_MANUAL_OFFSET;
+        // CALCULATE Y
+        y = ADJACENT_WALL_Y + toInch(Math.hypot((sideRaw + OFFSET_SIDE_X), (OFFSET_SIDE_Y)) * Math.cos(90 - Math.atan(heading / (sideRaw + OFFSET_SIDE_X)) - heading)) + Y_MANUAL_OFFSET;
 
         // CLEANUP
         if (reversed) {

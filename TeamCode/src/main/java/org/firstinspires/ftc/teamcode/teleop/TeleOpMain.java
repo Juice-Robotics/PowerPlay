@@ -43,6 +43,9 @@ public class TeleOpMain extends LinearOpMode {
 
         int buzzers = 0;
 
+        int stackPos = -220;
+        boolean stackDeposit = false;
+
         boolean autoCloseEnabled = true;
         boolean autoClosePreviousState = false;
         boolean previousClawState = false;
@@ -90,6 +93,11 @@ public class TeleOpMain extends LinearOpMode {
                 autoCloseEnabled = !autoCloseEnabled;
             }
 
+            if (gamepad1.left_trigger > 0.5) {
+                robot.slides.runToPosition(stackPos);
+                stackDeposit = true;
+            }
+
             if (gamepad2.left_trigger > 0.1) {
                 robot.slides.runToPosition((int) (robot.slides.slides1.motor.getCurrentPosition() + (0.1*gamepad2.left_trigger)));
             } else if (gamepad2.right_trigger > 0.1) {
@@ -109,6 +117,12 @@ public class TeleOpMain extends LinearOpMode {
             }
 
             boolean isPressed = gamepad1.cross;
+
+            if (isPressed && stackDeposit && !robot.claw.isOpen) {
+                stackDeposit = false;
+                stackPos += 80;
+            }
+
             if (isPressed && !previousClawState) {
                 robot.advancedToggleClaw();
             }
